@@ -10,7 +10,7 @@ error_reporting(0);
 mysqli_report(MYSQLI_REPORT_OFF);
 header('Content-Type: application/json; charset=utf-8');
 
-$conn = @mysqli_connect("localhost", "root", "", "ict_system");
+require_once 'config.php';
 if (!$conn) {
 echo json_encode(['status' => 'error', 'msg' => 'DB connect failed']);
 exit();

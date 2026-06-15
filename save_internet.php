@@ -1,13 +1,18 @@
 ﻿﻿<?php
+ob_start();
 session_start();
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+ob_end_clean();
 header('Content-Type: application/json');
 echo json_encode(['status'=>'error','msg'=>'Unauthorized']); exit();
 }
-header('Content-Type: application/json; charset=utf-8');
 
-$conn = mysqli_connect("localhost","root","","ict_system");
-if (!$conn) { echo json_encode(['status'=>'error','msg'=>'DB connection failed']); exit(); }
+require_once 'config.php';
+if (!$conn) {
+ob_end_clean();
+header('Content-Type: application/json; charset=utf-8');
+echo json_encode(['status'=>'error','msg'=>'DB connection failed']); exit();
+}
 
 // Ensure table exists
 mysqli_query($conn,"CREATE TABLE IF NOT EXISTS `internet_records` (
@@ -66,6 +71,8 @@ $sql = "UPDATE internet_records SET
         document_local='$document_local', document_link='$document_link',
         remark='$remark'
         WHERE id='$id'";
+ob_end_clean();
+header('Content-Type: application/json; charset=utf-8');
 if (mysqli_query($conn, $sql)) {
 echo json_encode(['status'=>'updated', 'link'=>$document_link_raw]);
 } else {
@@ -75,6 +82,8 @@ echo json_encode(['status'=>'error','msg'=>mysqli_error($conn)]);
 $sql = "INSERT INTO internet_records
         (internet_local,internet_type,package,price,start_date,end_date,document_local,document_link,remark)
         VALUES ('$internet_local','$internet_type','$package','$price',$sd_val,$ed_val,'$document_local','$document_link','$remark')";
+ob_end_clean();
+header('Content-Type: application/json; charset=utf-8');
 if (mysqli_query($conn, $sql)) {
 echo json_encode(['status'=>'saved', 'link'=>$document_link_raw]);
 } else {

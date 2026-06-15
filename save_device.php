@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header('Content-Type: application/json; charset=utf-8');
@@ -8,14 +9,19 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 ini_set('display_errors', 0);
 error_reporting(0);
 mysqli_report(MYSQLI_REPORT_OFF);
-header('Content-Type: application/json; charset=utf-8');
 
-$host = "localhost"; $user = "root"; $pass = ""; $db = "ict_system";
-$conn = @mysqli_connect($host, $user, $pass, $db);
+require_once 'config.php';
 if (!$conn) {
-echo json_encode(['status'=>'error','msg'=>'DB connect failed: '.mysqli_connect_error()]);
-exit();
+    ob_end_clean();
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode(['status'=>'error','msg'=>'DB connect failed: '.mysqli_connect_error()]);
+    exit();
 }
+
+// Force utf8mb4 on this connection explicitly
+mysqli_query($conn, "SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'");
+mysqli_query($conn, "SET CHARACTER SET utf8mb4");
+mysqli_set_charset($conn, 'utf8mb4');
 
 function esc($c, $v) { return mysqli_real_escape_string($c, trim($v ?? '')); }
 
@@ -122,6 +128,8 @@ $set_parts[] = "`$col` = {$vals[$i]}";
 
 $sql = "UPDATE `$src_table` SET " . implode(", ", $set_parts) . " WHERE id = '$id'";
 
+ob_end_clean();
+header('Content-Type: application/json; charset=utf-8');
 if (mysqli_query($conn, $sql)) {
 echo json_encode(['status'=>'updated', 'table'=>$src_table]);
 } else {
@@ -135,6 +143,8 @@ $val_str = implode(", ", $vals);
 
 $sql = "INSERT INTO `$table` ($col_str) VALUES ($val_str)";
 
+ob_end_clean();
+header('Content-Type: application/json; charset=utf-8');
 if (mysqli_query($conn, $sql)) {
 echo json_encode(['status'=>'saved', 'table'=>$table]);
 } else {

@@ -42,9 +42,9 @@ body {
     margin: 0 !important;
 }
 
-/* Blue Header Section - Dark Blue to match reference image */
+/* Blue Header Section - Dark Navy to match reference image */
 .panel > div:first-child {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #334155 100%) !important;
+    background: linear-gradient(135deg, #0d1b2e 0%, #1a2d4a 50%, #1e3a5f 100%) !important;
     padding: 2.5rem 2rem 2rem !important;
     text-align: center !important;
     position: relative !important;

@@ -2,9 +2,8 @@
 // ════════════════════════════════════════════════════
 //  register.php — TOTP Registration (Fixed)
 // ════════════════════════════════════════════════════
-ob_start();
-error_reporting(0);
 ini_set('display_errors', 0);
+error_reporting(0);
 ini_set('display_startup_errors', 0);
 
 // Session config ກ່ອນ session_start
@@ -15,21 +14,22 @@ ini_set('session.cookie_samesite', 'Lax');
 ini_set('session.gc_maxlifetime', 1800);
 
 session_start();
-// ✅ ບໍ່ມີ ob_clean() — ນີ້ຄືສາເຫດທີ່ເຮັດໃຫ້ JSON ຂາດ
 
-header('Content-Type: application/json; charset=utf-8');
-header('Cache-Control: no-cache, no-store');
+// Only set JSON header when this file is called directly (not required)
+if (basename($_SERVER['SCRIPT_FILENAME']) === 'register.php') {
+    header('Content-Type: application/json; charset=utf-8');
+    header('Cache-Control: no-cache, no-store');
+}
 
 function jsonOut(array $data): void {
-// ລ້າງ output buffer ທີ່ຄ້າງໄວ້ (PHP warnings ຫຼື whitespace)
-while (ob_get_level() > 0) ob_end_clean();
-echo json_encode($data, JSON_UNESCAPED_UNICODE);
-exit();
+    while (ob_get_level() > 0) ob_end_clean();
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    exit();
 }
 
 // ════ DB ════
-$conn = @mysqli_connect("localhost", "root", "", "ict_system");
-if (!$conn) jsonOut(['status' => 'error', 'msg' => 'DB failed: ' . mysqli_connect_error()]);
+require_once 'config.php';
 mysqli_set_charset($conn, 'utf8mb4');
 
 @mysqli_query($conn, "CREATE TABLE IF NOT EXISTS `system_users` (
@@ -207,6 +207,25 @@ $ins = @mysqli_query($conn,
 "INSERT INTO system_users (full_name, email, password, totp_secret, is_verified, role)
 VALUES ('$fn','$em','$pw','$sc', 1, 'user')"
 );
+
+// Auto-set default permissions: can_delete=0 for new users
+if ($ins) {
+    $new_uid = (int)mysqli_insert_id($conn);
+    if ($new_uid > 0) {
+        // Create table if not exists
+        @mysqli_query($conn,"CREATE TABLE IF NOT EXISTS `user_permissions` (
+            `id` INT AUTO_INCREMENT PRIMARY KEY,
+            `user_id` INT NOT NULL UNIQUE,
+            `can_edit` TINYINT(1) DEFAULT 1,
+            `can_delete` TINYINT(1) DEFAULT 0,
+            `view_only` TINYINT(1) DEFAULT 0,
+            `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        // Insert default: can_edit=1, can_delete=0
+        @mysqli_query($conn, "INSERT IGNORE INTO user_permissions (user_id, can_edit, can_delete, view_only) VALUES ($new_uid, 1, 0, 0)");
+    }
+}
 
 if ($ins) {
 unset($_SESSION['reg_pending']);

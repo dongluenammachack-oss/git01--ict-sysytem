@@ -8,7 +8,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 ini_set('display_errors',0); error_reporting(0); mysqli_report(MYSQLI_REPORT_OFF);
 header('Content-Type: application/json; charset=utf-8');
 
-$conn = @mysqli_connect("localhost","root","","ict_system");
+require_once 'config.php';
 if(!$conn){ echo json_encode(['status'=>'error','msg'=>'DB connect failed']); exit(); }
 
 // Auto-create table if not exists

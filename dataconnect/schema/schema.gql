@@ -1,0 +1,42 @@
+type User @table {
+  username: String!
+  email: String!
+  passwordHash: String!
+  createdAt: Timestamp!
+  displayName: String
+  lastLogin: Timestamp
+}
+
+type File @table {
+  filename: String!
+  fileUrl: String!
+  fileSize: Int64!
+  mimeType: String!
+  createdAt: Timestamp!
+  description: String
+  owner: User
+  folder: Folder
+}
+
+type Folder @table {
+  folderName: String!
+  createdAt: Timestamp!
+  owner: User
+  parentFolder: Folder
+}
+
+type Share @table {
+  shareLink: String!
+  permissionLevel: String!
+  createdAt: Timestamp!
+  sharer: User
+  file: File
+  folder: Folder
+}
+
+type Access @table {
+  accessedAt: Timestamp!
+  downloadedAt: Timestamp
+  accessedBy: User
+  share: Share
+}
