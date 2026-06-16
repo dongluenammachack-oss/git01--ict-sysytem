@@ -467,8 +467,40 @@ body{
     html,body{overflow:auto;}
     .card-scene{flex-direction:column;height:auto;min-height:100vh;}
     .panel{flex-direction:column;height:auto;}
-    .login-brand{flex:none;width:100%;height:auto;min-height:50vh;padding:4.5rem 2rem 3rem;}
-    .login-form-wrap{flex:none;width:100%;height:auto;padding:2.5rem 2rem;}
+    .login-brand{flex:none;width:100%;height:auto;min-height:auto;padding:3rem 1.5rem 2.5rem;}
+    .login-form-wrap{flex:none;width:100%;height:auto;padding:2.5rem 2rem 3rem;}
+    .brand-features{max-width:100%;gap:.4rem;}
+    .brand-hero{max-width:280px;}
+    .brand-main h3{font-size:1.2rem;}
+    .brand-logo-wrap{top:1.25rem;left:1.5rem;}
+}
+
+@media(max-width:600px){
+    .login-brand{padding:2.5rem 1.25rem 2rem;}
+    .brand-features{grid-template-columns:1fr 1fr;gap:.35rem;}
+    .brand-feat{padding:.5rem .65rem;}
+    .brand-feat span{font-size:.65rem;}
+    .brand-feat-icon{width:28px;height:28px;border-radius:7px;}
+    .brand-feat-icon i{font-size:.75rem;}
+    .brand-hero{max-width:220px;margin-bottom:.5rem;}
+    .brand-main h2{font-size:.58rem;}
+    .brand-main h3{font-size:1rem;}
+    .brand-main .brand-desc{font-size:.56rem;}
+    .login-form-wrap{padding:2rem 1.25rem 2.5rem;}
+    .form-inner{padding-top:2rem;}
+}
+
+@media(max-width:480px){
+    .login-brand{padding:2rem 1rem 1.75rem;}
+    .brand-features{grid-template-columns:1fr 1fr;gap:.3rem;}
+    .brand-logo-wrap{top:1rem;left:1rem;gap:.5rem;}
+    .brand-icon{width:24px;height:24px;border-radius:7px;}
+    .brand-name{font-size:.7rem;}
+    .login-form-wrap{padding:1.75rem 1rem 2.5rem;}
+    .form-inner{max-width:100%;padding-top:1.5rem;}
+    .login-form-wrap .form-title{font-size:1.7rem;}
+    input.field{font-size:.85rem;padding:.85rem 2.5rem .85rem .875rem;}
+    .btn-primary,.btn-register-trigger{padding:.875rem;font-size:.75rem;}
 }
 
 gap:.75rem;margin-bottom:1.25rem;font-size:.55rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#9aafc7;}

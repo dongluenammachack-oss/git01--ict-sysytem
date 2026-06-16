@@ -599,6 +599,169 @@ a.action-btn.edit{display:none !important;}
 .btn-close-form:hover{background:rgba(220,38,38,.75);border-color:rgba(255,255,255,.6);color:#fff;transform:scale(1.1);}
 /* When Clear Form is present, only small gap before ✕ */
 .btn-clear-header + .btn-close-form{margin-left:.5rem;}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — Hamburger button
+═══════════════════════════════════════════════ */
+.hamburger-btn{
+    display:none;
+    width:38px;height:38px;border-radius:10px;
+    background:var(--bg);border:1.5px solid var(--border);
+    align-items:center;justify-content:center;
+    color:var(--navy);font-size:1rem;cursor:pointer;
+    flex-shrink:0;transition:all .2s;
+    margin-right:.5rem;
+}
+.hamburger-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+/* Sidebar overlay (mobile) */
+.sidebar-overlay{
+    display:none;position:fixed;inset:0;
+    background:rgba(1,36,77,.55);backdrop-filter:blur(4px);
+    z-index:39;opacity:0;transition:opacity .28s;
+}
+.sidebar-overlay.open{opacity:1;}
+
+/* ── Tablet (≤1024px): collapse sidebar to icon-only ── */
+@media(max-width:1024px){
+    .sidebar{width:64px;min-width:64px;}
+    .logo-text,.ver-card .vl,.ver-card .vn,
+    .nav-section-label,.nav-chevron,
+    .nav-link > span > span:last-child,
+    .nav-link > span:not(.nav-icon),
+    .settings-btn{display:none;}
+    .logo-wrap{padding:.875rem .75rem;justify-content:center;}
+    .logo-icon{margin:0;}
+    .sidebar nav{padding:.5rem .5rem;}
+    .nav-link{justify-content:center;padding:.55rem;gap:0;}
+    .nav-link > span{justify-content:center;}
+    .nav-icon{width:32px;height:32px;}
+    .nav-link.active{border-left:3px solid #fff;padding-left:calc(.55rem - 3px);}
+    .menu-open > .nav-link{border-left:3px solid #fff;padding-left:calc(.55rem - 3px);}
+    .submenu{display:none !important;}
+    .sidebar-footer{padding:.5rem;}
+    .ver-card{justify-content:center;padding:.5rem;}
+    .ver-card i{font-size:1rem;}
+    .hdr-title{left:50%;transform:translate(-50%,-50%);}
+    /* Dashboard grids */
+    .db-grid-4{grid-template-columns:repeat(2,1fr);}
+    .db-grid-7,.status-grid{grid-template-columns:repeat(4,1fr);}
+    .bottom-grid{grid-template-columns:1fr;}
+    .g3{grid-template-columns:1fr 1fr;}
+    .g4{grid-template-columns:1fr 1fr;}
+}
+
+/* ── Mobile (≤768px): full sidebar overlay ── */
+@media(max-width:768px){
+    html,body{overflow:auto;height:auto;}
+    body{display:block;overflow-x:hidden;}
+
+    /* Sidebar slides in as overlay */
+    .sidebar{
+        position:fixed;top:0;left:0;bottom:0;
+        width:260px;min-width:260px;
+        transform:translateX(-100%);
+        transition:transform .28s cubic-bezier(.4,0,.2,1);
+        z-index:40;
+        /* re-show text that was hidden at tablet */
+        display:flex;
+    }
+    .sidebar.open{transform:translateX(0);}
+    .sidebar-overlay{display:block;}
+    .sidebar-overlay.open{pointer-events:all;}
+
+    /* Restore sidebar text visibility */
+    .logo-text,.ver-card .vl,.ver-card .vn,
+    .nav-section-label,.nav-chevron,
+    .sidebar nav,.logo-wrap{display:flex !important;}
+    .logo-text{display:block !important;}
+    .ver-card .vl,.ver-card .vn{display:block !important;}
+    .nav-section-label,.nav-chevron{display:block !important;}
+    .logo-wrap{padding:1.375rem 1.125rem 1rem;justify-content:flex-start;}
+    .logo-icon{margin:0;}
+    .sidebar nav{padding:.875rem .75rem;flex-direction:column;}
+    .nav-link{justify-content:space-between;padding:.55rem .75rem;gap:.625rem;}
+    .nav-link > span{justify-content:flex-start;}
+    .nav-icon{width:28px;height:28px;}
+    .nav-link.active,.menu-open>.nav-link{border-left:3px solid #fff;padding-left:calc(.75rem - 3px);}
+    .submenu{display:none;}
+    .sidebar-footer{padding:.75rem;display:block;}
+    .ver-card{justify-content:flex-start;padding:.625rem .875rem;}
+    .ver-card i{font-size:.9rem;}
+    .settings-btn{display:flex !important;}
+
+    /* Main layout takes full width */
+    main{display:flex;flex-direction:column;min-height:100vh;}
+
+    /* Header */
+    header{
+        position:sticky;top:0;z-index:30;
+        padding:0 1rem;gap:.5rem;
+        height:56px;
+    }
+    .hamburger-btn{display:flex;}
+    .hdr-title{position:static;transform:none;flex:1;text-align:left;}
+    .hdr-title h2{font-size:.6rem;}
+    .hdr-title span{display:none;}
+    .online-dot{display:none;}
+    .user-pill .urole{display:none;}
+    .user-pill{padding:.22rem .5rem .22rem .22rem;}
+    .user-pill .uname{font-size:.65rem;}
+    .btn-logout span{display:none;}
+    .btn-logout{padding:.32rem .55rem;gap:0;}
+
+    /* Content padding */
+    .content{padding:1rem;}
+
+    /* Page header */
+    .page-hdr{flex-direction:column;align-items:flex-start;gap:.5rem;}
+    .page-hdr h2{font-size:1.15rem;}
+    .actions-row{width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:.25rem;}
+
+    /* Dashboard grids */
+    .db-grid-4{grid-template-columns:repeat(2,1fr);gap:.6rem;}
+    .db-grid-3{grid-template-columns:repeat(2,1fr);gap:.6rem;}
+    .db-grid-7{grid-template-columns:repeat(2,1fr);gap:.5rem;}
+    .status-grid{grid-template-columns:repeat(2,1fr);gap:.5rem;}
+    .bottom-grid{grid-template-columns:1fr;}
+    .db-card{padding:.875rem 1rem;}
+    .db-icon{width:40px;height:40px;}
+    .db-val{font-size:1.4rem;}
+
+    /* Forms */
+    .form-wrap{border-radius:var(--r-lg);}
+    .form-body{padding:1rem;}
+    .g2,.g3,.g4{grid-template-columns:1fr;}
+    .g-span2,.g-span3{grid-column:span 1;}
+
+    /* Tables */
+    .tbl-scroll{max-height:none;overflow-x:auto;}
+    .filter-bar{flex-wrap:wrap;gap:.4rem;}
+    .filter-bar > *{flex-shrink:0;}
+    thead th,tbody td{font-size:.72rem;padding:.55rem .65rem;}
+    thead th:first-child,tbody td:first-child{padding-left:.875rem;}
+    thead th:last-child,tbody td:last-child{padding-right:.875rem;}
+
+    /* Settings panel */
+    .settings-panel{max-width:100%;border-radius:var(--r-xl) var(--r-xl) 0 0;margin-top:auto;}
+    .settings-overlay{align-items:flex-end;}
+}
+
+/* ── Small mobile (≤480px) ── */
+@media(max-width:480px){
+    .db-grid-4,.db-grid-3,.db-grid-7,.status-grid{grid-template-columns:1fr 1fr;}
+    .db-card{gap:.6rem;}
+    .db-icon{width:36px;height:36px;border-radius:10px;font-size:.95rem;}
+    .db-val{font-size:1.2rem;}
+    .db-lbl{font-size:.55rem;}
+    header{height:52px;padding:0 .75rem;}
+    .hdr-title h2{font-size:.55rem;letter-spacing:.14em;}
+    .content{padding:.75rem;}
+    .page-hdr h2{font-size:1rem;}
+    .btn-act{font-size:.67rem;padding:.38rem .65rem;}
+    .form-header{padding:1rem 1.125rem;}
+    .form-header h3{font-size:.78rem;}
+}
 </style>
 <!-- SheetJS for Excel export -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -607,6 +770,9 @@ a.action-btn.edit{display:none !important;}
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
+
+<!-- Sidebar overlay for mobile -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
@@ -731,6 +897,9 @@ if($is_admin): ?>
 <!-- MAIN -->
 <main>
 <header>
+<button class="hamburger-btn" id="hamburgerBtn" onclick="openSidebar()" aria-label="Open menu">
+<i class="fas fa-bars"></i>
+</button>
 <div class="online-dot">Online</div>
 <div class="hdr-title">
 <h1 style="font-weight: bold;">Dashboard Panel</h1>
@@ -2796,6 +2965,11 @@ if($is_admin): ?>
                                                                                                                                                                                                                                                                         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                                                                                                                                                                                                                                                                         <script>
                                                                                                                                                                                                                                                                         function toggleSub(id,btn){const el=document.getElementById(id);const grp=btn?btn.closest('.menu-group'):null;if(!el)return;const open=el.style.display==='block';el.style.display=open?'none':'block';if(grp)grp.classList.toggle('menu-open',!open);}
+// Sidebar mobile open/close
+function openSidebar(){document.querySelector('.sidebar').classList.add('open');document.getElementById('sidebarOverlay').classList.add('open');}
+function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('open');}
+// Close sidebar when nav link is clicked on mobile
+document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.nav-link,.submenu a').forEach(function(el){el.addEventListener('click',function(){if(window.innerWidth<=768)closeSidebar();});});});
                                                                                                                                                                                                                                                                                 // Permission guards
                                                                                                                                                                                                                                                                                 const _canEdit=<?=json_encode($_can_edit)?>;
                                                                                                                                                                                                                                                                                 const _canDelete=<?=json_encode($_can_delete)?>;
