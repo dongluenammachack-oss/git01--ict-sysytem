@@ -366,22 +366,28 @@ body{
 }
 .brand-hero svg{width:100%;height:auto;filter:drop-shadow(0 8px 32px rgba(59,130,246,.2));}
 .brand-main h2{
-    font-family:'Geist Mono',monospace;
-    font-size:1.1rem;font-weight:700;color:#3b82f6;
-    margin-bottom:.3rem;line-height:1.2;
-    text-align:center;letter-spacing:.2em;text-transform:uppercase;
+    font-family:'Inter',sans-serif;
+    font-size:.65rem;font-weight:600;color:rgba(147,197,253,.7);
+    margin-bottom:.35rem;line-height:1;
+    text-align:center;letter-spacing:.28em;text-transform:uppercase;
 }
 .brand-main h3{
-    font-family:'Geist Mono',monospace;
-    font-size:1.25rem;font-weight:800;color:#3b82f6;
-    margin-bottom:.5rem;line-height:1.2;
-    text-align:center;letter-spacing:.15em;text-transform:uppercase;
+    font-family:'Inter',sans-serif;
+    font-size:1.45rem;font-weight:800;
+    background:linear-gradient(135deg,#ffffff 30%,#93c5fd 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    margin-bottom:.55rem;line-height:1.1;
+    text-align:center;letter-spacing:.06em;text-transform:uppercase;
 }
-.brand-main h3 .highlight{color:#4ade80;}
+.brand-main h3 .highlight{
+    background:linear-gradient(135deg,#4ade80,#22d3ee);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
 .brand-main .brand-desc{
-    font-size:.6rem;color:rgba(255,255,255,.4);
-    line-height:1.5;max-width:440px;margin-bottom:1.25rem;
-    text-align:center;text-transform:uppercase;letter-spacing:.08em;
+    font-family:'Inter',sans-serif;
+    font-size:.62rem;font-weight:400;color:rgba(255,255,255,.35);
+    line-height:1.6;max-width:400px;margin-bottom:1.35rem;
+    text-align:center;letter-spacing:.12em;text-transform:uppercase;
 }
 /* 2-column grid for 8 items */
 .brand-features{
@@ -411,12 +417,14 @@ body{
     display:flex;align-items:center;justify-content:center;
 }
 .brand-feat-icon i{font-size:.85rem;color:#93c5fd;}
-.brand-feat span{font-size:.72rem;font-weight:500;color:rgba(255,255,255,.82);line-height:1.3;}
+.brand-feat span{font-family:'Inter',sans-serif;font-size:.7rem;font-weight:500;color:rgba(255,255,255,.78);line-height:1.35;letter-spacing:.01em;}
 
 /* footer */
 .brand-footer{
     position:absolute;bottom:1.25rem;left:0;right:0;
-    font-size:.56rem;color:rgba(255,255,255,.3);z-index:2;text-align:center;
+    font-family:'Inter',sans-serif;
+    font-size:.55rem;font-weight:400;letter-spacing:.1em;
+    color:rgba(255,255,255,.25);z-index:2;text-align:center;text-transform:uppercase;
 }
 
 /* ── RIGHT: White form panel ── */
@@ -439,16 +447,19 @@ body{
     padding-top:4rem;
 }
 .login-form-wrap .form-lbl-sm{
-    font-size:.58rem;font-weight:700;letter-spacing:.16em;
-    text-transform:uppercase;color:#94a3b8;margin-bottom:.3rem;
+    font-family:'Inter',sans-serif;
+    font-size:.58rem;font-weight:600;letter-spacing:.2em;
+    text-transform:uppercase;color:#94a3b8;margin-bottom:.25rem;
 }
 .login-form-wrap .form-title{
-    font-size:1.9rem;font-weight:900;
-    color:#0f172a;letter-spacing:-.03em;margin-bottom:.4rem;line-height:1.1;
+    font-family:'Inter',sans-serif;
+    font-size:2.1rem;font-weight:800;
+    color:#0f172a;letter-spacing:-.04em;margin-bottom:.35rem;line-height:1.05;
 }
 .login-form-wrap .form-sub{
-    font-size:.72rem;color:#64748b;
-    margin-bottom:1.75rem;line-height:1.5;
+    font-family:'Inter',sans-serif;
+    font-size:.72rem;font-weight:400;color:#94a3b8;
+    margin-bottom:1.75rem;line-height:1.55;letter-spacing:.01em;
 }
 
 /* ── Responsive ── */
@@ -469,9 +480,9 @@ gap:.75rem;margin-bottom:1.25rem;font-size:.55rem;font-weight:700;letter-spacing
 .field-group{margin-bottom:1.4rem;position:relative;}
 
 .field-lbl{
-    display:block;font-size:.65rem;font-weight:700;
-    color:#1e293b;margin-bottom:.5rem;
-    text-transform:uppercase;letter-spacing:.1em;
+    display:block;font-family:'Inter',sans-serif;font-size:.62rem;font-weight:700;
+    color:#475569;margin-bottom:.45rem;
+    text-transform:uppercase;letter-spacing:.12em;
 }
 .field-lbl .req{color:#ef4444;font-weight:800;}
 
@@ -489,10 +500,11 @@ input.field{
     border:1.5px solid #e2e8f0;
     border-radius:10px;
     font-family:'Inter',sans-serif;
-    font-size:.88rem;
+    font-size:.875rem;
     font-weight:400;
     color:#0f172a;
     outline:none;
+    -webkit-font-smoothing:antialiased;
     transition:border-color .18s,box-shadow .18s;
 }
 input.field:focus{
@@ -517,8 +529,8 @@ input.field::placeholder{color:#94a3b8;font-weight:400;}
     color:#fff;
     border:2px solid #0f172a;
     border-radius:10px;
-    font-family:'Inter',sans-serif;font-size:.88rem;font-weight:700;
-    text-transform:uppercase;letter-spacing:.12em;
+    font-family:'Inter',sans-serif;font-size:.8rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.18em;
     cursor:pointer;transition:all .2s;
     margin-top:.75rem;
     display:flex;align-items:center;justify-content:center;gap:.6rem;
@@ -755,12 +767,12 @@ input.field {
 .pw-bar{height:3px;flex:1;border-radius:2px;background:#e8eef8;transition:background .25s;}
 .pw-label{font-size:.58rem;font-weight:700;margin-left:.4rem;min-width:44px;}
 .login-footer{text-align:center;margin-top:1.5rem;padding-top:1rem;border-top:1px solid #eef3fb;}
-.ver-note{font-size:.58rem;color:#94a3b8;letter-spacing:.04em;}
+.ver-note{font-family:'Inter',sans-serif;font-size:.58rem;font-weight:400;color:#94a3b8;letter-spacing:.06em;}
 /* Remember Me row */
 .remember-row{display:flex;align-items:center;gap:.65rem;margin-bottom:1.1rem;padding:.85rem 1rem;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:all .2s;user-select:none;}
 .remember-row:hover{border-color:#94a3b8;background:#f1f5f9;}
 .remember-row input[type=checkbox]{width:16px;height:16px;accent-color:#0f172a;cursor:pointer;flex-shrink:0;}
-.remember-row label{font-size:.82rem;font-weight:400;color:#374151;cursor:pointer;flex:1;}
+.remember-row label{font-family:'Inter',sans-serif;font-size:.78rem;font-weight:400;color:#475569;cursor:pointer;flex:1;letter-spacing:.01em;}
 .spinner{width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;animation:spin .7s linear infinite;display:none;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .steps{display:flex;align-items:center;justify-content:center;gap:.35rem;margin-bottom:1.25rem;}
@@ -1441,7 +1453,7 @@ html,body{background:#162540!important;overflow:hidden!important;}
 <!-- RIGHT: Form -->
 <div class="login-form-wrap">
 <div class="form-inner">
-    <div class="form-lbl-sm">Welcome To ICT Systen </div>
+    <div class="form-lbl-sm">Welcome to ICT System</div>
     <div class="form-title">Sign In</div>
     <div class="form-sub">Enter your credentials to access the system</div>
 
