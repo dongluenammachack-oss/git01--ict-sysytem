@@ -236,246 +236,322 @@ if (!empty($_COOKIE['ict_remember'])) {
 <script src="js-translations.js?v=<?php echo time(); ?>"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;}
-body{font-family:'Inter','Noto Sans Lao',system-ui,sans-serif;background:linear-gradient(135deg, #0f172a 0%, #1e293b 30%, #334155 70%, #475569 100%);display:flex;align-items:center;justify-content:center;min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;overflow:hidden;}
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
-.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;opacity:.3;}
-.orb-1{width:600px;height:600px;background:radial-gradient(circle,#0057b8,transparent 70%);top:-200px;left:-150px;}
-.orb-2{width:500px;height:500px;background:radial-gradient(circle,#06c3ff,transparent 70%);bottom:-150px;right:-100px;}
-.card-scene{width:100%;max-width:430px;position:relative;z-index:1;animation:slideUp .45s cubic-bezier(.22,.68,0,1.2);}
-@keyframes slideUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
-.panel{background:#fff;border-radius:24px;padding:2.5rem 2.25rem;box-shadow:0 30px 70px rgba(0,0,0,.4);overflow:hidden;}
+html,body{height:100%;width:100%;overflow:hidden;}
+
+/* ═══ OVERRIDE modern-forms.css for login page ═══ */
+body{
+    font-family:'Inter','Noto Sans Lao',system-ui,sans-serif !important;
+    -webkit-font-smoothing:antialiased;
+    background:#162540 !important;
+}
+
+/* ═══════════════════════════════════════════════════
+   FULLSCREEN SPLIT: Left 75% purple | Right 25% white
+   SHOP PRO style — override modern-forms.css
+═══════════════════════════════════════════════════ */
+.card-scene{
+    display:flex !important;
+    width:100vw !important;
+    height:100vh !important;
+    max-width:100vw !important;
+    overflow:hidden !important;
+    position:fixed !important;
+    top:0 !important;left:0 !important;
+    padding:0 !important;
+    background:transparent !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    animation:none !important;
+    z-index:1;
+}
+
+.panel{
+    display:flex !important;
+    width:100% !important;
+    height:100% !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    overflow:hidden !important;
+    padding:0 !important;
+    margin:0 !important;
+    background:transparent !important;
+}
+
+/* Cancel modern-forms.css panel-child overrides on login page */
+#loginPanel > .login-brand,
+#loginPanel > .login-form-wrap{
+    border-radius:0 !important;
+}
+#loginPanel.panel > div:first-child{
+    background:none !important;
+    padding:0 !important;
+    text-align:left !important;
+    position:relative !important;
+    border-radius:0 !important;
+}
+#loginPanel.panel > div:last-child{
+    padding:0 !important;
+    background:transparent !important;
+}
+
+/* ── LEFT: Navy gradient brand panel ── */
+.login-brand{
+    flex:0 0 75%;
+    width:75%;
+    height:100%;
+    background:linear-gradient(180deg,#0f1f35 0%,#162540 40%,#1a2d4a 70%,#1e3254 100%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:3rem 4rem;
+    position:relative;
+    overflow:hidden;
+    text-align:center;
+}
+/* Large soft circle decorations — match reference image */
+.login-brand::before{
+    content:'';position:absolute;
+    width:420px;height:420px;border-radius:50%;
+    background:rgba(255,255,255,.045);
+    top:-100px;right:-80px;pointer-events:none;
+}
+.login-brand::after{
+    content:'';position:absolute;
+    width:360px;height:360px;border-radius:50%;
+    background:rgba(255,255,255,.04);
+    bottom:-100px;left:-60px;pointer-events:none;
+}
+/* Extra circle bottom-right */
+.login-brand .circle-extra{
+    content:'';position:absolute;
+    width:200px;height:200px;border-radius:50%;
+    background:rgba(255,255,255,.03);
+    bottom:40px;right:-40px;pointer-events:none;
+    display:block;
+}
+
+/* logo top-left */
+.brand-logo-wrap{
+    position:absolute;top:2rem;left:2.5rem;
+    display:flex;align-items:center;gap:.75rem;z-index:2;
+}
+.brand-icon{
+    width:28px;height:28px;
+    background:rgba(255,255,255,.15);
+    border:1.5px solid rgba(255,255,255,.25);
+    border-radius:9px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:.75rem;color:#fff;flex-shrink:0;
+}
+.brand-name{
+    font-family:'Geist Mono',monospace;
+    font-size:.82rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:#fff;line-height:1.35;
+}
+.brand-name span{display:none;}
+
+/* center content */
+.brand-main{
+    position:relative;z-index:2;
+    display:flex;flex-direction:column;align-items:center;
+    width:100%;max-width:580px;
+    margin-top:0;
+}
+/* ICT hero illustration area */
+.brand-hero{
+    width:100%;max-width:440px;
+    margin-bottom:.75rem;
+    position:relative;
+}
+.brand-hero svg{width:100%;height:auto;filter:drop-shadow(0 8px 32px rgba(59,130,246,.2));}
+.brand-main h2{
+    font-family:'Geist Mono',monospace;
+    font-size:1.1rem;font-weight:700;color:#3b82f6;
+    margin-bottom:.3rem;line-height:1.2;
+    text-align:center;letter-spacing:.2em;text-transform:uppercase;
+}
+.brand-main h3{
+    font-family:'Geist Mono',monospace;
+    font-size:1.25rem;font-weight:800;color:#3b82f6;
+    margin-bottom:.5rem;line-height:1.2;
+    text-align:center;letter-spacing:.15em;text-transform:uppercase;
+}
+.brand-main h3 .highlight{color:#4ade80;}
+.brand-main .brand-desc{
+    font-size:.6rem;color:rgba(255,255,255,.4);
+    line-height:1.5;max-width:440px;margin-bottom:1.25rem;
+    text-align:center;text-transform:uppercase;letter-spacing:.08em;
+}
+/* 2-column grid for 8 items */
+.brand-features{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:.5rem;
+    width:100%;max-width:540px;
+}
+.brand-feat{
+    display:flex;align-items:center;gap:.75rem;
+    padding:.65rem .875rem;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:10px;
+    text-align:left;
+    transition:background .2s, border-color .2s;
+}
+.brand-feat:hover{
+    background:rgba(255,255,255,.13);
+    border-color:rgba(255,255,255,.2);
+}
+.brand-feat-icon{
+    width:34px;height:34px;flex-shrink:0;
+    background:rgba(59,130,246,.18);
+    border:1px solid rgba(59,130,246,.25);
+    border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+}
+.brand-feat-icon i{font-size:.85rem;color:#93c5fd;}
+.brand-feat span{font-size:.72rem;font-weight:500;color:rgba(255,255,255,.82);line-height:1.3;}
+
+/* footer */
+.brand-footer{
+    position:absolute;bottom:1.25rem;left:0;right:0;
+    font-size:.56rem;color:rgba(255,255,255,.3);z-index:2;text-align:center;
+}
+
+/* ── RIGHT: White form panel ── */
+.login-form-wrap{
+    flex:1;
+    width:25%;
+    height:100%;
+    background:#fff;
+    padding:0 1.75rem;
+    display:flex;flex-direction:column;justify-content:flex-start;
+    overflow-y:auto;
+}
+
+/* Form content wrapper — fill available width, centered */
+.form-inner{
+    width:100%;
+    max-width:320px;
+    margin-left:auto;
+    margin-right:auto;
+    padding-top:4rem;
+}
+.login-form-wrap .form-lbl-sm{
+    font-size:.58rem;font-weight:700;letter-spacing:.16em;
+    text-transform:uppercase;color:#94a3b8;margin-bottom:.3rem;
+}
+.login-form-wrap .form-title{
+    font-size:1.9rem;font-weight:900;
+    color:#0f172a;letter-spacing:-.03em;margin-bottom:.4rem;line-height:1.1;
+}
+.login-form-wrap .form-sub{
+    font-size:.72rem;color:#64748b;
+    margin-bottom:1.75rem;line-height:1.5;
+}
+
+/* ── Responsive ── */
+@media(max-width:860px){
+    html,body{overflow:auto;}
+    .card-scene{flex-direction:column;height:auto;min-height:100vh;}
+    .panel{flex-direction:column;height:auto;}
+    .login-brand{flex:none;width:100%;height:auto;min-height:50vh;padding:4.5rem 2rem 3rem;}
+    .login-form-wrap{flex:none;width:100%;height:auto;padding:2.5rem 2rem;}
+}
+
+gap:.75rem;margin-bottom:1.25rem;font-size:.55rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#9aafc7;}
+.divider-text::before,.divider-text::after{content:'';flex:1;height:1px;background:#e8eef8;}
 .logo-area{text-align:center;margin-bottom:1.75rem;}
 .logo-icon-wrap{width:60px;height:60px;background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto .75rem;box-shadow:0 8px 24px rgba(0,0,0,.2);}
 .logo-icon-wrap i{color:#06c3ff;font-size:1.5rem;}
-.logo-area h1{font-family:'Geist Mono',monospace;font-size:.82rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#002347;}
-.logo-area p{font-size:.62rem;color:#6b7fa3;letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
-.divider-text{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#9aafc7;}
-.divider-text::before,.divider-text::after{content:'';flex:1;height:1px;background:#e8eef8;}
 /* Enhanced Modern Form Styling */
-.field-group{
-    margin-bottom:1.5rem;
-    position:relative;
-}
+.field-group{margin-bottom:1.4rem;position:relative;}
 
 .field-lbl{
-    display:block;
-    font-size:.8rem;
-    font-weight:700;
-    color:#1f2937;
-    margin-bottom:.6rem;
-    transition:all .3s ease;
-    text-transform:uppercase;
-    letter-spacing:.05em;
+    display:block;font-size:.65rem;font-weight:700;
+    color:#1e293b;margin-bottom:.5rem;
+    text-transform:uppercase;letter-spacing:.1em;
 }
+.field-lbl .req{color:#ef4444;font-weight:800;}
 
-.field-lbl .req{
-    color:#ef4444;
-    font-weight:800;
-}
-
-.field-wrap{
-    position:relative;
-    transform-style:preserve-3d;
-}
+.field-wrap{position:relative;}
 
 .field-wrap .fi{
-    position:absolute;
-    left:1.2rem;
-    top:50%;
-    transform:translateY(-50%);
-    color:#6b7280;
-    font-size:.9rem;
-    pointer-events:none;
-    transition:all .4s cubic-bezier(.4,0,.2,1);
-    z-index:2;
+    display:none; /* Hide left icons — not in reference design */
 }
 
-/* Ultra Modern Input Fields */
+/* ── Form fields — clean style matching reference image ── */
 input.field{
     width:100%;
-    padding:1rem 1.5rem 1rem 3.2rem;
-    background:linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-    border:3px solid #e2e8f0;
-    border-radius:16px;
-    font-family:'Inter', sans-serif;
-    font-size:.9rem;
-    font-weight:500;
+    padding:.9rem 2.75rem .9rem 1rem;
+    background:#f8fafc;
+    border:1.5px solid #e2e8f0;
+    border-radius:10px;
+    font-family:'Inter',sans-serif;
+    font-size:.88rem;
+    font-weight:400;
     color:#0f172a;
     outline:none;
-    transition:all .4s cubic-bezier(.4,0,.2,1);
-    position:relative;
-    backdrop-filter:blur(20px);
-    box-shadow:0 4px 20px rgba(0,0,0,.05), inset 0 1px 0 rgba(255,255,255,.8);
+    transition:border-color .18s,box-shadow .18s;
 }
-
 input.field:focus{
-    border-color:#0057b8;
-    background:linear-gradient(145deg, #ffffff 0%, #f0f9ff 100%);
-    box-shadow:0 0 0 6px rgba(0,87,184,.15), 0 12px 40px rgba(0,87,184,.2);
-    transform:translateY(-4px) scale(1.02);
+    border-color:#94a3b8;
+    background:#fff;
+    box-shadow:0 0 0 3px rgba(148,163,184,.12);
 }
+input.field::placeholder{color:#94a3b8;font-weight:400;}
 
-input.field:focus + .field-wrap .fi{
-    color:#0057b8;
-    transform:translateY(-50%) scale(1.2) translateX(4px);
-    text-shadow:0 2px 4px rgba(0,87,184,.3);
-}
-
-input.field::placeholder{
-    color:#94a3b8;
-    font-weight:400;
-    transition:all .3s ease;
-}
-
-input.field:focus::placeholder{
-    opacity:.5;
-    transform:translateX(8px);
-}
-
-/* Ultra Modern Password Toggle */
+/* Password toggle — eye icon right side */
 .pw-toggle{
-    position:absolute;
-    right:1.2rem;
-    top:50%;
-    transform:translateY(-50%);
-    color:#6b7280;
-    border:none;
-    background:linear-gradient(145deg, rgba(255,255,255,.9), rgba(248,250,252,.9));
-    cursor:pointer;
-    font-size:.9rem;
-    padding:.6rem;
-    border-radius:10px;
-    transition:all .4s cubic-bezier(.4,0,.2,1);
-    backdrop-filter:blur(20px);
-    box-shadow:0 2px 8px rgba(0,0,0,.1);
+    position:absolute;right:.75rem;top:50%;transform:translateY(-50%);
+    color:#64748b;border:none;background:none;cursor:pointer;font-size:.9rem;padding:.3rem;
+    transition:color .15s;
 }
+.pw-toggle:hover{color:#374151;}
 
-.pw-toggle:hover{
-    color:#0057b8;
-    background:linear-gradient(145deg, #f0f9ff, #dbeafe);
-    transform:translateY(-50%) scale(1.15) rotate(5deg);
-    box-shadow:0 4px 16px rgba(0,87,184,.2);
-}
-
-/* Ultra Modern Primary Button */
+/* LOG IN button — dark filled like reference image */
 .btn-primary{
-    width:100%;
-    padding:1.2rem 2rem;
-    background:linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-    color:#ffffff;
-    border:none;
-    border-radius:16px;
-    font-family:'Inter', sans-serif;
-    font-size:.85rem;
-    font-weight:800;
-    text-transform:uppercase;
-    letter-spacing:.2em;
-    cursor:pointer;
-    transition:all .5s cubic-bezier(.4,0,.2,1);
-    margin-top:1.5rem;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:.8rem;
-    position:relative;
-    overflow:hidden;
-    box-shadow:0 8px 32px rgba(15,23,42,.4), 0 4px 16px rgba(51,65,85,.3);
-    text-shadow:0 2px 4px rgba(0,0,0,.3);
+    width:100%;padding:1rem 1rem;
+    background:#0f172a;
+    color:#fff;
+    border:2px solid #0f172a;
+    border-radius:10px;
+    font-family:'Inter',sans-serif;font-size:.88rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:.12em;
+    cursor:pointer;transition:all .2s;
+    margin-top:.75rem;
+    display:flex;align-items:center;justify-content:center;gap:.6rem;
 }
+.btn-primary:hover{background:#1e293b;border-color:#1e293b;}
 
-.btn-primary::before{
-    content:'';
-    position:absolute;
-    top:0;
-    left:-100%;
-    width:100%;
-    height:100%;
-    background:linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
-    transition:left .8s ease;
-}
-
-.btn-primary:hover{
-    transform:translateY(-6px) scale(1.02);
-    box-shadow:0 16px 48px rgba(0,35,71,.5), 0 8px 24px rgba(6,195,255,.4);
-    background:linear-gradient(135deg, #003a5c 0%, #0066cc 30%, #00d4ff 100%);
-}
-
-.btn-primary:hover::before{
-    left:100%;
-}
-
-.btn-primary:active{
-    transform:translateY(-2px) scale(.98);
-    transition:transform .1s ease;
-}
-
-/* Ultra Modern Secondary Buttons */
+/* Register button — blue text, light border */
 .btn-register-trigger{
-    width:100%;
-    padding:1rem 1.5rem;
-    background:linear-gradient(145deg, rgba(255,255,255,.95), rgba(248,250,252,.95));
-    border:3px solid #e2e8f0;
-    border-radius:16px;
-    font-family:'Inter', sans-serif;
-    font-size:.8rem;
-    font-weight:700;
-    color:#0057b8;
-    cursor:pointer;
-    transition:all .4s cubic-bezier(.4,0,.2,1);
-    margin-top:1rem;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:.6rem;
-    position:relative;
-    backdrop-filter:blur(20px);
-    box-shadow:0 4px 16px rgba(0,0,0,.05);
+    width:100%;padding:1rem 1rem;
+    background:#fff;border:2px solid #4361ee;border-radius:10px;
+    font-family:'Inter',sans-serif;font-size:.88rem;font-weight:600;
+    color:#4361ee;cursor:pointer;transition:background .2s,color .2s,border-color .2s;
+    margin-top:.625rem;display:flex;align-items:center;justify-content:center;gap:.5rem;
 }
-
-.btn-register-trigger:hover{
-    background:linear-gradient(145deg, #f0f9ff, #dbeafe);
-    border-color:#0057b8;
-    transform:translateY(-4px) scale(1.02);
-    box-shadow:0 8px 32px rgba(0,87,184,.2);
-    color:#003a5c;
+.btn-register-trigger i{color:#4361ee;}
+.btn-register-trigger:hover,
+.btn-register-trigger:focus{
+    background:#4361ee !important;
+    border-color:#4361ee !important;
+    color:#fff !important;
 }
+.btn-register-trigger:hover i,
+.btn-register-trigger:focus i{color:#fff !important;}
 
-/* Ultra Modern Reset Password Button */
+/* Reset password button */
 .btn-reset-password{
-    width:100%;
-    padding:1rem 1.5rem;
-    background:linear-gradient(135deg, #fef2f2 0%, #fee2e2 50%, #fecaca 100%);
-    border:3px solid #fca5a5;
-    border-radius:16px;
-    font-family:'Inter', sans-serif;
-    font-size:.8rem;
-    font-weight:700;
-    color:#dc2626;
-    cursor:pointer;
-    transition:all .4s cubic-bezier(.4,0,.2,1);
-    margin-top:.8rem;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:.6rem;
-    position:relative;
-    animation:pulseRed 4s ease-in-out infinite;
-    box-shadow:0 4px 16px rgba(220,38,38,.2);
+    width:100%;padding:.75rem 1rem;
+    background:#fef2f2;border:1.5px solid #fca5a5;border-radius:10px;
+    font-family:'Inter',sans-serif;font-size:.76rem;font-weight:600;color:#dc2626;
+    cursor:pointer;transition:all .15s;margin-top:.6rem;
+    display:flex;align-items:center;justify-content:center;gap:.5rem;
 }
-
-.btn-reset-password:hover{
-    background:linear-gradient(135deg, #fee2e2 0%, #fecaca 50%, #f87171 100%);
-    border-color:#ef4444;
-    transform:translateY(-4px) scale(1.02);
-    box-shadow:0 8px 32px rgba(220,38,38,.3);
-    color:#991b1b;
-}
-
-@keyframes pulseRed{
-    0%,100%{box-shadow:0 4px 16px rgba(220,38,38,.2), 0 0 0 0 rgba(220,38,38,.4);}
-    50%{box-shadow:0 4px 16px rgba(220,38,38,.2), 0 0 0 12px rgba(220,38,38,.0);}
-}
+.btn-reset-password:hover{background:#fee2e2;border-color:#ef4444;}
 /* Enhanced Mobile Responsiveness */
 @media (max-width: 480px) {
     .card-scene {
@@ -678,19 +754,19 @@ input.field {
 .pw-strength{margin-top:.4rem;display:flex;gap:3px;align-items:center;}
 .pw-bar{height:3px;flex:1;border-radius:2px;background:#e8eef8;transition:background .25s;}
 .pw-label{font-size:.58rem;font-weight:700;margin-left:.4rem;min-width:44px;}
-.login-footer{text-align:center;margin-top:1.5rem;padding-top:1.125rem;border-top:1px solid #eef3fb;}
-.ver-note{font-size:.56rem;color:#aab8cc;}
+.login-footer{text-align:center;margin-top:1.5rem;padding-top:1rem;border-top:1px solid #eef3fb;}
+.ver-note{font-size:.58rem;color:#94a3b8;letter-spacing:.04em;}
 /* Remember Me row */
-.remember-row{display:flex;align-items:center;gap:.65rem;margin-bottom:1.25rem;padding:.75rem 1rem;background:linear-gradient(135deg,#f8fafc,#f1f5f9);border:1.5px solid #e2e8f0;border-radius:12px;cursor:pointer;transition:all .2s;user-select:none;}
-.remember-row:hover{border-color:#93c5fd;background:linear-gradient(135deg,#eff6ff,#dbeafe);}
-.remember-row input[type=checkbox]{width:18px;height:18px;accent-color:#0057b8;cursor:pointer;flex-shrink:0;}
-.remember-row label{font-size:.78rem;font-weight:600;color:#374151;cursor:pointer;flex:1;}
+.remember-row{display:flex;align-items:center;gap:.65rem;margin-bottom:1.1rem;padding:.85rem 1rem;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:all .2s;user-select:none;}
+.remember-row:hover{border-color:#94a3b8;background:#f1f5f9;}
+.remember-row input[type=checkbox]{width:16px;height:16px;accent-color:#0f172a;cursor:pointer;flex-shrink:0;}
+.remember-row label{font-size:.82rem;font-weight:400;color:#374151;cursor:pointer;flex:1;}
 .spinner{width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;animation:spin .7s linear infinite;display:none;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .steps{display:flex;align-items:center;justify-content:center;gap:.35rem;margin-bottom:1.25rem;}
 .step-dot{width:8px;height:8px;border-radius:50%;background:#dce6f5;transition:all .3s;}
-.step-dot.active{width:22px;border-radius:4px;background:#0057b8;}
-.step-dot.done{background:#0ea5e9;}
+.step-dot.active{width:22px;border-radius:4px;background:#6d28d9;}
+.step-dot.done{background:#a78bfa;}
 /* Enhanced Modal Styling */
 .modal-overlay{
     position:fixed;
@@ -1118,22 +1194,256 @@ input.rst-field.bad{border-color:#dc2626;}
 .btn-go-login{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;padding:.85rem 2.5rem;background:linear-gradient(90deg,#002347,#0057b8);color:#fff;border:none;border-radius:10px;font-family:inherit;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;transition:all .18s;}
 .btn-go-login:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,35,71,.3);}
 </style>
+<!-- Final override: kill modern-forms.css dark body on login page -->
+<style>
+html,body{background:#162540!important;overflow:hidden!important;}
+/* Register button hover — force blue fill */
+.btn-register-trigger:hover,
+.btn-register-trigger:focus{
+    background:#4361ee!important;
+    border-color:#4361ee!important;
+    color:#fff!important;
+}
+.btn-register-trigger:hover i,
+.btn-register-trigger:focus i{color:#fff!important;}
+.card-scene{
+    position:fixed!important;inset:0!important;
+    width:100vw!important;height:100vh!important;
+    max-width:100vw!important;
+    display:flex!important;flex-direction:row!important;
+    padding:0!important;background:transparent!important;
+    border-radius:0!important;box-shadow:none!important;animation:none!important;
+}
+#loginPanel{
+    display:flex!important;width:100%!important;height:100%!important;
+    border-radius:0!important;box-shadow:none!important;
+    overflow:hidden!important;padding:0!important;margin:0!important;background:transparent!important;
+}
+/* Prevent modern-forms.css from touching .login-brand */
+#loginPanel > .login-brand{
+    flex:0 0 75%!important;width:75%!important;height:100%!important;
+    background:linear-gradient(180deg,#0f1f35 0%,#162540 40%,#1a2d4a 70%,#1e3254 100%)!important;
+    padding:3rem 4rem!important;
+    border-radius:0!important;
+    text-align:center!important;
+    display:flex!important;flex-direction:column!important;
+    align-items:center!important;justify-content:center!important;
+    position:relative!important;overflow:hidden!important;
+}
+#loginPanel > .login-form-wrap{
+    flex:1!important;width:25%!important;height:100%!important;
+    background:#fff!important;
+    padding:0 1.75rem!important;
+    display:flex!important;flex-direction:column!important;justify-content:flex-start!important;
+    overflow-y:auto!important;
+    border-radius:0!important;
+}
+/* Override modern-forms panel first/last child to NOT affect login brand+form */
+#loginPanel.panel > div:first-child{
+    background:linear-gradient(180deg,#0f1f35 0%,#162540 40%,#1a2d4a 70%,#1e3254 100%)!important;
+    padding:3rem 4rem!important;
+    text-align:center!important;
+    border-radius:0!important;
+}
+#loginPanel.panel > div:last-child{
+    background:#fff!important;
+    padding:0 1.75rem!important;
+    border-radius:0!important;
+}
+</style>
 </head>
 <body>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
 
 <div class="card-scene">
 
 <!-- ══ LOGIN PANEL ══ -->
-<div class="panel" id="loginPanel" style="padding:0;overflow:hidden;">
-<div style="background:linear-gradient(135deg,#0d1b2e 0%,#1a2d4a 50%,#1e3a5f 100%);padding:2rem 2.25rem 1.75rem;text-align:center;position:relative;border-radius:24px 24px 0 0;">
-<div class="logo-icon-wrap" style="background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.25);box-shadow:0 8px 32px rgba(0,0,0,.25);"><i class="fas fa-shield-halved" style="color:#fff;"></i></div>
-<h1 style="font-family:'Geist Mono',monospace;font-size:.82rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#fff;">ICT Control Center</h1>
-<p style="font-size:.62rem;color:rgba(255,255,255,.6);letter-spacing:.1em;text-transform:uppercase;margin-top:4px;">Halo Trust Laos</p>
+<div class="panel" id="loginPanel">
+
+<!-- LEFT: Brand -->
+<div class="login-brand">
+    <span class="circle-extra"></span>
+    <div class="brand-logo-wrap">
+        <div class="brand-icon"><i class="fas fa-shield-halved"></i></div>
+        <div class="brand-name">ICT Control Center<span>Halo Trust Laos</span></div>
+    </div>
+    <div class="brand-main">
+        <!-- 3D Computer illustration -->
+        <div class="brand-hero">
+            <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <!-- 3D face gradients white tones -->
+                    <linearGradient id="monFront" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#ffffff"/>
+                        <stop offset="100%" stop-color="#d0daf0"/>
+                    </linearGradient>
+                    <linearGradient id="monTop" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#ffffff"/>
+                        <stop offset="100%" stop-color="#e8eeff"/>
+                    </linearGradient>
+                    <linearGradient id="monSide" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#b8c8e8"/>
+                        <stop offset="100%" stop-color="#d8e4f8"/>
+                    </linearGradient>
+                    <linearGradient id="screenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#0f172a"/>
+                        <stop offset="100%" stop-color="#1e3a5f"/>
+                    </linearGradient>
+                    <linearGradient id="baseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#e2eaf8"/>
+                        <stop offset="100%" stop-color="#c4d0e8"/>
+                    </linearGradient>
+                    <linearGradient id="baseSide" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#a8b8d8"/>
+                        <stop offset="100%" stop-color="#c4d0e8"/>
+                    </linearGradient>
+                    <linearGradient id="kbFront" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#e8f0ff"/>
+                        <stop offset="100%" stop-color="#c8d4ee"/>
+                    </linearGradient>
+                    <linearGradient id="kbTop" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#ffffff"/>
+                        <stop offset="100%" stop-color="#dde6f8"/>
+                    </linearGradient>
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="3" result="blur"/>
+                        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="4" dy="6" stdDeviation="6" flood-color="rgba(0,0,0,0.35)"/>
+                    </filter>
+                </defs>
+
+                <!-- ══ MONITOR BODY 3D ══ -->
+                <!-- Top face -->
+                <polygon points="55,30 265,30 280,18 70,18" fill="url(#monTop)" stroke="rgba(255,255,255,.6)" stroke-width=".5"/>
+                <!-- Right side face -->
+                <polygon points="265,30 280,18 280,148 265,160" fill="url(#monSide)" stroke="rgba(180,200,230,.4)" stroke-width=".5"/>
+                <!-- Front face -->
+                <rect x="55" y="30" width="210" height="130" rx="4" fill="url(#monFront)" filter="url(#shadow)"/>
+
+                <!-- Screen bezel (inner dark rim) -->
+                <rect x="65" y="40" width="190" height="108" rx="3" fill="#1a2540"/>
+                <!-- Screen display area -->
+                <rect x="70" y="44" width="180" height="100" rx="2" fill="url(#screenGrad)"/>
+
+                <!-- Screen content glow lines -->
+                <rect x="82" y="58"  width="100" height="5"  rx="2" fill="rgba(99,179,237,.55)"/>
+                <rect x="82" y="68"  width="70"  height="4"  rx="2" fill="rgba(99,179,237,.35)"/>
+                <rect x="82" y="80"  width="130" height="4"  rx="2" fill="rgba(99,179,237,.3)"/>
+                <rect x="82" y="89"  width="90"  height="4"  rx="2" fill="rgba(99,179,237,.25)"/>
+                <rect x="82" y="98"  width="110" height="4"  rx="2" fill="rgba(99,179,237,.2)"/>
+                <rect x="82" y="107" width="60"  height="4"  rx="2" fill="rgba(99,179,237,.2)"/>
+                <!-- Screen cursor blink dot -->
+                <rect x="82" y="120" width="8" height="8" rx="1" fill="rgba(56,189,248,.9)" filter="url(#glow)"/>
+
+                <!-- Power LED -->
+                <circle cx="157" cy="148" r="3" fill="#4ade80" opacity=".9" filter="url(#glow)"/>
+
+                <!-- ══ NECK / STAND ══ -->
+                <!-- neck front -->
+                <rect x="140" y="160" width="40" height="20" rx="2" fill="url(#baseGrad)"/>
+                <!-- neck side -->
+                <polygon points="180,160 192,152 192,172 180,180" fill="url(#baseSide)"/>
+                <!-- neck top -->
+                <polygon points="140,160 152,152 192,152 180,160" fill="url(#monTop)"/>
+
+                <!-- ══ BASE STAND 3D ══ -->
+                <!-- base top face -->
+                <polygon points="85,188 235,188 248,178 98,178" fill="url(#monTop)" stroke="rgba(255,255,255,.5)" stroke-width=".5"/>
+                <!-- base right side -->
+                <polygon points="235,188 248,178 248,200 235,210" fill="url(#baseSide)"/>
+                <!-- base front face -->
+                <rect x="85" y="188" width="150" height="22" rx="3" fill="url(#baseGrad)"/>
+
+                <!-- ══ KEYBOARD 3D ══ -->
+                <!-- kb top face -->
+                <polygon points="40,206 276,206 288,196 52,196" fill="url(#kbTop)"/>
+                <!-- kb right side -->
+                <polygon points="276,206 288,196 288,216 276,226" fill="url(#baseSide)"/>
+                <!-- kb front face -->
+                <rect x="40" y="206" width="236" height="20" rx="3" fill="url(#kbFront)"/>
+
+                <!-- Keyboard keys rows -->
+                <g fill="rgba(150,170,210,.6)" stroke="rgba(255,255,255,.4)" stroke-width=".4">
+                    <!-- row 1 -->
+                    <rect x="50"  y="198" width="14" height="6" rx="1.5"/>
+                    <rect x="67"  y="198" width="14" height="6" rx="1.5"/>
+                    <rect x="84"  y="198" width="14" height="6" rx="1.5"/>
+                    <rect x="101" y="198" width="14" height="6" rx="1.5"/>
+                    <rect x="118" y="198" width="14" height="6" rx="1.5"/>
+                    <rect x="135" y="198" width="14" height="6" rx="1.5"/>
+                    <rect x="152" y="198" width="14" height="6" rx="1.5"/>
+                    <rect x="169" y="198" width="14" height="6" rx="1.5"/>
+                    <rect x="186" y="198" width="14" height="6" rx="1.5"/>
+                    <rect x="203" y="198" width="14" height="6" rx="1.5"/>
+                    <rect x="220" y="198" width="14" height="6" rx="1.5"/>
+                    <rect x="237" y="198" width="24" height="6" rx="1.5"/>
+                </g>
+                <!-- spacebar -->
+                <rect x="88" y="219" width="140" height="5" rx="2" fill="rgba(200,215,240,.5)" stroke="rgba(255,255,255,.3)" stroke-width=".5"/>
+
+                <!-- ══ MOUSE 3D ══ -->
+                <!-- mouse body -->
+                <ellipse cx="290" cy="200" rx="16" ry="22" fill="url(#monFront)" stroke="rgba(200,215,240,.5)" stroke-width="1"/>
+                <!-- mouse side highlight -->
+                <ellipse cx="294" cy="200" rx="8" ry="18" fill="url(#monSide)" opacity=".5"/>
+                <!-- mouse scroll wheel -->
+                <rect x="286" y="191" width="8" height="10" rx="3" fill="rgba(180,200,230,.7)"/>
+                <!-- mouse line divider -->
+                <line x1="290" y1="182" x2="290" y2="218" stroke="rgba(180,200,230,.6)" stroke-width="1"/>
+                <!-- mouse cable -->
+                <path d="M290 178 Q290 168 278 165 Q266 162 265 155" stroke="rgba(200,215,240,.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+            </svg>
+        </div>
+
+        <h2>ICT MANAGEMENT</h2>
+        <h3>ICT MANAGEMENT <span class="highlight">SYSTEM</span></h3>
+        <p class="brand-desc">Centralized platform for ICT infrastructure management</p>
+        <div class="brand-features">
+            <div class="brand-feat">
+                <div class="brand-feat-icon"><i class="fas fa-user-gear"></i></div>
+                <span>Account</span>
+            </div>
+            <div class="brand-feat">
+                <div class="brand-feat-icon"><i class="fas fa-laptop"></i></div>
+                <span>ICT Device</span>
+            </div>
+            <div class="brand-feat">
+                <div class="brand-feat-icon"><i class="fas fa-plug"></i></div>
+                <span>ICT Accessories</span>
+            </div>
+            <div class="brand-feat">
+                <div class="brand-feat-icon"><i class="fas fa-triangle-exclamation"></i></div>
+                <span>Devices Mistake</span>
+            </div>
+            <div class="brand-feat">
+                <div class="brand-feat-icon"><i class="fas fa-id-card"></i></div>
+                <span>Card Record</span>
+            </div>
+            <div class="brand-feat">
+                <div class="brand-feat-icon"><i class="fas fa-boxes-stacked"></i></div>
+                <span>Equipment Stock</span>
+            </div>
+            <div class="brand-feat">
+                <div class="brand-feat-icon"><i class="fas fa-users"></i></div>
+                <span>Employees</span>
+            </div>
+            <div class="brand-feat">
+                <div class="brand-feat-icon"><i class="fas fa-wifi"></i></div>
+                <span>Internet</span>
+            </div>
+        </div>
+    </div>
+    <div class="brand-footer">© <?=date('Y')?> ICT SYSTEM &nbsp;|&nbsp; v2.8.0</div>
 </div>
-<div style="padding:1.75rem 2.25rem 2.5rem;">
-<div class="divider-text">Secure Login</div>
+
+<!-- RIGHT: Form -->
+<div class="login-form-wrap">
+<div class="form-inner">
+    <div class="form-lbl-sm">Welcome To ICT Systen </div>
+    <div class="form-title">Sign In</div>
+    <div class="form-sub">Enter your credentials to access the system</div>
 
 <?php if ($error): ?>
     <div class="error-box"><i class="fas fa-circle-exclamation"></i><?= htmlspecialchars($error) ?></div>
@@ -1142,7 +1452,7 @@ input.rst-field.bad{border-color:#dc2626;}
     <?php if ($showReset): ?>
         <div class="fail-badge">
         <i class="fas fa-triangle-exclamation"></i>
-        Incorrect username or password over than 3 times Please reset your password.
+        Incorrect username or password over than 3 times. Please reset your password.
         </div>
         <?php endif; ?>
         
@@ -1150,14 +1460,12 @@ input.rst-field.bad{border-color:#dc2626;}
         <div class="field-group">
         <label class="field-lbl" for="username">Username / Email</label>
         <div class="field-wrap">
-        <i class="fas fa-user fi"></i>
         <input type="text" id="username" name="username" class="field" placeholder="admin or registered Email" required autofocus value="<?= $remember_username ?>">
         </div>
         </div>
         <div class="field-group">
         <label class="field-lbl" for="password">Password</label>
         <div class="field-wrap">
-        <i class="fas fa-lock fi"></i>
         <input type="password" id="password" name="password" class="field" placeholder="Enter your password" required>
         <button type="button" class="pw-toggle" id="pwToggle"><i class="fas fa-eye" id="pwIcon"></i></button>
         </div>
@@ -1166,59 +1474,83 @@ input.rst-field.bad{border-color:#dc2626;}
         <input type="checkbox" id="remember_me" name="remember_me" value="1" <?= $remember_checked ? 'checked' : '' ?>>
         <label for="remember_me">Remind me to sign in</label>
         </label>
-        <button type="submit" class="btn-primary"><i class="fas fa-right-to-bracket"></i> Log in</button>
+        <button type="submit" class="btn-primary"><i class="fas fa-right-to-bracket"></i> Log In</button>
         </form>
         
         <?php if ($showReset): ?>
             <button class="btn-reset-password" onclick="openResetModal()">
-            <i class="fas fa-key"></i> Reset Password here
+            <i class="fas fa-key"></i> Reset Password
             </button>
             <?php endif; ?>
             
             <button class="btn-register-trigger" onclick="showRegister()">
             <i class="fas fa-user-plus"></i> Register new account
             </button>
-            <div class="login-footer"><div class="ver-note">ICT System v2.7.0 &nbsp;·&nbsp; HALO Trust Laos</div></div>
-            </div><!-- /inner padding div -->
-            </div><!-- /loginPanel -->
+            <div class="login-footer"><div class="ver-note">ICT System v2.8.0 &nbsp;·&nbsp; Control </div></div>
+
+</div><!-- /form-inner -->
+</div><!-- /login-form-wrap -->
+</div><!-- /loginPanel -->
             
-            <!-- ══ REGISTER PANEL ══ -->
-            <div class="panel" id="registerPanel" style="display:none;padding:0;overflow:hidden;">
-            <div style="background:linear-gradient(135deg,#0d1b2e 0%,#1a2d4a 50%,#1e3a5f 100%);padding:1.25rem 2.25rem 1.25rem;text-align:center;position:relative;border-radius:24px 24px 0 0;">
-            <div class="logo-icon-wrap" style="background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.25);box-shadow:0 8px 32px rgba(0,0,0,.25);margin:0 auto .625rem;"><i class="fas fa-user-plus" style="color:#fff;"></i></div>
-            <h1 style="font-family:'Geist Mono',monospace;font-size:.82rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#fff;"><?php _t('create_account'); ?></h1>
-            <p style="font-size:.62rem;color:rgba(255,255,255,.6);letter-spacing:.1em;text-transform:uppercase;margin-top:3px;"><?php _t('register_to_ict_system'); ?></p>
+            <!-- ══ REGISTER MODAL ══ -->
+            <div id="registerPanel" style="display:none;position:fixed;inset:0;z-index:50;background:rgba(10,22,40,.75);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:1rem;">
+
+            <!-- modal card -->
+            <div style="width:100%;max-width:440px;margin:auto;background:#fff;border-radius:20px;box-shadow:0 40px 100px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.08);overflow:hidden;animation:regModalIn .35s cubic-bezier(.22,.68,0,1.2);">
+
+            <!-- modal header -->
+            <div style="background:linear-gradient(160deg,#0a1628 0%,#0d1f3c 40%,#112244 70%,#1a2d4a 100%);padding:1.75rem 1.75rem 1.5rem;display:flex;align-items:center;gap:1rem;position:relative;">
+            <div style="width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 6px 20px rgba(0,0,0,.2);">
+            <i class="fas fa-user-plus" style="color:#fff;font-size:1.1rem;"></i>
             </div>
-            <div style="padding:1.25rem 2.25rem 1.75rem;">
+            <div>
+            <div style="font-family:'Geist Mono',monospace;font-size:.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#fff;line-height:1.2;"><?php _t('create_account'); ?></div>
+            <div style="font-size:.6rem;color:rgba(255,255,255,.45);letter-spacing:.08em;text-transform:uppercase;margin-top:.2rem;"><?php _t('register_to_ict_system'); ?></div>
+            </div>
+            <button onclick="showLogin()" style="position:absolute;top:1rem;right:1rem;width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.12)'">
+            <i class="fas fa-times"></i>
+            </button>
+            </div>
+
+            <!-- modal body -->
+            <div style="padding:1.5rem 1.75rem 1.75rem;">
+
+            <!-- error box -->
+            <div id="reg-error" style="display:none;background:#fef2f2;border:1.5px solid #fecaca;border-radius:9px;padding:.6rem .875rem;margin-bottom:.875rem;color:#b91c1c;font-size:.72rem;font-weight:600;align-items:center;gap:.5rem;">
+                <i class="fas fa-circle-exclamation"></i><span id="reg-error-text"></span>
+            </div>
+
+            <!-- step dots -->
             <div class="steps" style="margin-bottom:1rem;">
             <div class="step-dot active" id="step1dot"></div>
             <div class="step-dot" id="step2dot"></div>
             </div>
-            <div class="divider-text"><?php _t('account_information'); ?></div>
+            <div class="divider-text" style="margin-bottom:1rem;"><?php _t('account_information'); ?></div>
+
             <form id="registerForm" autocomplete="off">
-            <div class="field-group">
+            <div class="field-group" style="margin-bottom:.875rem;">
             <label class="field-lbl">Full Name <span class="req">*</span></label>
             <div class="field-wrap"><i class="fas fa-id-card fi"></i>
             <input type="text" id="reg_fullname" class="field" placeholder="<?php _t('full_name_placeholder'); ?>" required></div>
             </div>
-            <div class="field-group">
+            <div class="field-group" style="margin-bottom:.875rem;">
             <label class="field-lbl">Email <span class="req">*</span></label>
             <div class="field-wrap"><i class="fas fa-envelope fi"></i>
             <input type="email" id="reg_email" class="field" placeholder="example@halotrust.org" required></div>
             </div>
-            <div class="field-group">
+            <div class="field-group" style="margin-bottom:.875rem;">
             <label class="field-lbl">Password <span class="req">*</span></label>
             <div class="field-wrap"><i class="fas fa-lock fi"></i>
             <input type="password" id="reg_password" class="field" placeholder="At least 6 characters" required oninput="checkPwStrength(this.value)">
             <button type="button" class="pw-toggle" onclick="togglePw('reg_password',this)"><i class="fas fa-eye"></i></button>
             </div>
-            <div class="pw-strength">
+            <div class="pw-strength" style="margin-top:.35rem;">
             <div class="pw-bar" id="bar1"></div><div class="pw-bar" id="bar2"></div>
             <div class="pw-bar" id="bar3"></div><div class="pw-bar" id="bar4"></div>
             <span class="pw-label" id="pw-label" style="color:#9aafc7;"></span>
             </div>
             </div>
-            <div class="field-group">
+            <div class="field-group" style="margin-bottom:1rem;">
             <label class="field-lbl">Confirm Password <span class="req">*</span></label>
             <div class="field-wrap"><i class="fas fa-lock-open fi"></i>
             <input type="password" id="reg_confirm" class="field" placeholder="New password one more time" required>
@@ -1226,16 +1558,28 @@ input.rst-field.bad{border-color:#dc2626;}
             </div>
             <div id="pw-match-hint" style="font-size:.63rem;margin-top:.3rem;display:none;"></div>
             </div>
-            <button type="submit" class="btn-primary" id="registerBtn" style="background:linear-gradient(135deg,#0f172a,#1e293b,#334155);margin-top:.75rem;">
+
+            <button type="submit" class="btn-primary" id="registerBtn" style="background:linear-gradient(135deg,#0a1628,#0d1f3c,#1a2d4a);margin-top:0;box-shadow:0 6px 20px rgba(10,22,40,.35);">
             <i class="fas fa-qrcode"></i>
             <span id="regBtnText">Register &amp; Setup Authenticator</span>
             <div class="spinner" id="regSpinner"></div>
             </button>
             </form>
-            <button class="btn-back" onclick="showLogin()" style="width:100%;justify-content:center;margin-top:.75rem;color:#0057b8;background:transparent;border:1.5px solid #dce6f5;border-radius:10px;padding:.6rem;font-size:.73rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:all .15s;" onmouseover="this.style.background='#eff6ff'" onmouseout="this.style.background='transparent'"><i class="fas fa-arrow-left"></i> Back to Login</button>
-            <div class="login-footer" style="margin-top:.875rem;"><div class="ver-note">ICT System v2.7.0 &nbsp;·&nbsp; HALO Trust Laos</div></div>
-            </div><!-- /inner padding -->
+
+            <div style="text-align:center;margin-top:1rem;padding-top:.875rem;border-top:1px solid #f1f5f9;">
+            <div style="font-size:.56rem;color:#aab8cc;">ICT System v2.7.0 &nbsp;·&nbsp; HALO Trust Laos</div>
             </div>
+
+            </div><!-- /modal body -->
+            </div><!-- /modal card -->
+            </div><!-- /registerPanel -->
+
+<style>
+@keyframes regModalIn{
+    from{opacity:0;transform:scale(.92) translateY(20px);}
+    to{opacity:1;transform:scale(1) translateY(0);}
+}
+</style>
             
             </div><!-- /card-scene -->
             
@@ -1418,14 +1762,12 @@ input.rst-field.bad{border-color:#dc2626;}
             
             /* ════ PANEL SWITCH ════ */
             function showRegister(){
-            document.getElementById('loginPanel').style.display='none';
             var rp=document.getElementById('registerPanel');
-            rp.style.cssText='display:block;animation:slideUp .38s cubic-bezier(.22,.68,0,1.2)';
+            rp.style.cssText='display:flex;position:fixed;inset:0;z-index:50;background:rgba(10,22,40,.75);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:1rem;';
+            clearRegForm();
             }
             function showLogin(){
             document.getElementById('registerPanel').style.display='none';
-            var lp=document.getElementById('loginPanel');
-            lp.style.cssText='display:block;animation:slideUp .38s cubic-bezier(.22,.68,0,1.2)';
             clearRegForm();
             }
             
