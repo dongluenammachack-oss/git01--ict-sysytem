@@ -1,4 +1,3 @@
 ﻿# InfinityFree Hosting Configuration
-DirectoryIndex login.php ictsystem.php
+DirectoryIndex login.php index.php
 AddDefaultCharset UTF-8
-
