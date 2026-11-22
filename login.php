@@ -238,6 +238,11 @@ if (!empty($_COOKIE['ict_remember'])) {
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;width:100%;overflow:hidden;}
 
+/* ── Mobile override: allow scroll ── */
+@media(max-width:860px){
+    html,body{height:auto;overflow:auto;min-height:100vh;}
+}
+
 /* ═══ OVERRIDE modern-forms.css for login page ═══ */
 body{
     font-family:'Inter','Noto Sans Lao',system-ui,sans-serif !important;
@@ -265,6 +270,16 @@ body{
     z-index:1;
 }
 
+/* Mobile: allow natural scroll, no fixed */
+@media(max-width:860px){
+    .card-scene{
+        position:relative !important;
+        height:auto !important;
+        min-height:100vh !important;
+        overflow:visible !important;
+    }
+}
+
 .panel{
     display:flex !important;
     width:100% !important;
@@ -275,6 +290,14 @@ body{
     padding:0 !important;
     margin:0 !important;
     background:transparent !important;
+}
+
+@media(max-width:860px){
+    .panel{
+        height:auto !important;
+        min-height:100vh !important;
+        overflow:visible !important;
+    }
 }
 
 /* Cancel modern-forms.css panel-child overrides on login page */
@@ -309,28 +332,6 @@ body{
     overflow:hidden;
     text-align:center;
 }
-/* Large soft circle decorations — match reference image */
-.login-brand::before{
-    content:'';position:absolute;
-    width:420px;height:420px;border-radius:50%;
-    background:rgba(255,255,255,.045);
-    top:-100px;right:-80px;pointer-events:none;
-}
-.login-brand::after{
-    content:'';position:absolute;
-    width:360px;height:360px;border-radius:50%;
-    background:rgba(255,255,255,.04);
-    bottom:-100px;left:-60px;pointer-events:none;
-}
-/* Extra circle bottom-right */
-.login-brand .circle-extra{
-    content:'';position:absolute;
-    width:200px;height:200px;border-radius:50%;
-    background:rgba(255,255,255,.03);
-    bottom:40px;right:-40px;pointer-events:none;
-    display:block;
-}
-
 /* logo top-left */
 .brand-logo-wrap{
     position:absolute;top:2rem;left:2.5rem;
@@ -398,26 +399,76 @@ body{
 }
 .brand-feat{
     display:flex;align-items:center;gap:.75rem;
-    padding:.65rem .875rem;
+    padding:.75rem .875rem;
     background:rgba(255,255,255,.07);
     border:1px solid rgba(255,255,255,.12);
-    border-radius:10px;
+    border-radius:12px;
     text-align:left;
-    transition:background .2s, border-color .2s;
+    cursor:pointer;
+    transition:background .2s, border-color .2s, transform .15s, box-shadow .2s;
+    user-select:none;
 }
 .brand-feat:hover{
-    background:rgba(255,255,255,.13);
-    border-color:rgba(255,255,255,.2);
+    background:rgba(255,255,255,.15);
+    border-color:rgba(99,179,237,.45);
+    transform:translateY(-2px);
+    box-shadow:0 6px 20px rgba(0,0,0,.2);
 }
+.brand-feat:active{transform:scale(.97);}
 .brand-feat-icon{
-    width:34px;height:34px;flex-shrink:0;
-    background:rgba(59,130,246,.18);
-    border:1px solid rgba(59,130,246,.25);
-    border-radius:8px;
+    width:36px;height:36px;flex-shrink:0;
+    background:rgba(59,130,246,.22);
+    border:1px solid rgba(59,130,246,.3);
+    border-radius:9px;
     display:flex;align-items:center;justify-content:center;
 }
-.brand-feat-icon i{font-size:.85rem;color:#93c5fd;}
-.brand-feat span{font-family:'Inter',sans-serif;font-size:.7rem;font-weight:500;color:rgba(255,255,255,.78);line-height:1.35;letter-spacing:.01em;}
+.brand-feat-icon i{font-size:.9rem;color:#93c5fd;}
+.brand-feat span{font-family:'Inter',sans-serif;font-size:.72rem;font-weight:500;color:rgba(255,255,255,.82);line-height:1.35;letter-spacing:.01em;}
+
+/* ── LOGIN MODAL (triggered by menu click) ── */
+.login-modal-overlay{
+    display:none;
+    position:fixed;inset:0;z-index:200;
+    background:rgba(8,18,36,.72);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    align-items:center;justify-content:center;
+    padding:1rem;
+    animation:fadeInOverlay .25s ease;
+}
+.login-modal-overlay.open{display:flex;}
+@keyframes fadeInOverlay{from{opacity:0;}to{opacity:1;}}
+.login-modal-card{
+    width:100%;max-width:420px;
+    background:#fff;
+    border-radius:24px;
+    box-shadow:0 32px 80px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.08);
+    overflow:hidden;
+    animation:slideUpModal .3s cubic-bezier(.22,.68,0,1.2);
+    position:relative;
+}
+@keyframes slideUpModal{from{opacity:0;transform:translateY(28px) scale(.96);}to{opacity:1;transform:translateY(0) scale(1);}}
+.login-modal-header{
+    background:linear-gradient(135deg,#0a1628 0%,#0d2040 50%,#1a2d4a 100%);
+    padding:1.25rem 1.5rem .875rem;
+    display:flex;align-items:center;gap:.75rem;
+}
+.login-modal-header .lmh-icon{
+    width:38px;height:38px;border-radius:10px;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1rem;color:#93c5fd;flex-shrink:0;
+}
+.login-modal-header .lmh-text h3{font-family:'Inter',sans-serif;font-size:.78rem;font-weight:700;color:#fff;letter-spacing:.06em;text-transform:uppercase;}
+.login-modal-header .lmh-text p{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:2px;}
+.login-modal-close{
+    margin-left:auto;width:30px;height:30px;border-radius:8px;
+    background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.6);
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    font-size:.78rem;transition:all .15s;flex-shrink:0;
+}
+.login-modal-close:hover{background:rgba(255,255,255,.22);color:#fff;}
+.login-modal-body{padding:1.5rem 1.5rem 1.25rem;}
 
 /* footer */
 .brand-footer{
@@ -464,11 +515,11 @@ body{
 
 /* ── Responsive ── */
 @media(max-width:860px){
-    html,body{overflow:auto;}
-    .card-scene{flex-direction:column;height:auto;min-height:100vh;}
-    .panel{flex-direction:column;height:auto;}
+    html,body{overflow:auto;height:auto;min-height:100vh;}
+    .card-scene{flex-direction:column;height:auto;min-height:100vh;position:relative !important;overflow:visible !important;}
+    .panel{flex-direction:column;height:auto;overflow:visible !important;}
     .login-brand{flex:none;width:100%;height:auto;min-height:auto;padding:3rem 1.5rem 2.5rem;}
-    .login-form-wrap{flex:none;width:100%;height:auto;padding:2.5rem 2rem 3rem;}
+    .login-form-wrap{flex:none;width:100%;height:auto;padding:2.5rem 2rem 3rem;overflow-y:visible;}
     .brand-features{max-width:100%;gap:.4rem;}
     .brand-hero{max-width:280px;}
     .brand-main h3{font-size:1.2rem;}
@@ -798,7 +849,7 @@ input.field {
 .pw-strength{margin-top:.4rem;display:flex;gap:3px;align-items:center;}
 .pw-bar{height:3px;flex:1;border-radius:2px;background:#e8eef8;transition:background .25s;}
 .pw-label{font-size:.58rem;font-weight:700;margin-left:.4rem;min-width:44px;}
-.login-footer{text-align:center;margin-top:1.5rem;padding-top:1rem;border-top:1px solid #eef3fb;}
+.login-footer{position:fixed;bottom:0;left:0;right:0;z-index:10;text-align:center;padding:.75rem 1rem;pointer-events:none;}
 .ver-note{font-family:'Inter',sans-serif;font-size:.58rem;font-weight:400;color:#94a3b8;letter-spacing:.06em;}
 /* Remember Me row */
 .remember-row{display:flex;align-items:center;gap:.65rem;margin-bottom:1.1rem;padding:.85rem 1rem;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;transition:all .2s;user-select:none;}
@@ -1294,6 +1345,71 @@ html,body{background:#162540!important;overflow:hidden!important;}
     padding:0 1.75rem!important;
     border-radius:0!important;
 }
+
+/* ── RESPONSIVE OVERRIDE (mobile/tablet) ── */
+@media(max-width:860px){
+    .card-scene{
+        position:relative!important;
+        inset:auto!important;
+        height:auto!important;
+        min-height:100vh!important;
+        flex-direction:column!important;
+        overflow:visible!important;
+    }
+    #loginPanel{
+        flex-direction:column!important;
+        height:auto!important;
+        min-height:100vh!important;
+        overflow:visible!important;
+    }
+    #loginPanel > .login-brand{
+        flex:none!important;
+        width:100%!important;
+        height:auto!important;
+        min-height:auto!important;
+        padding:2.5rem 1.5rem 2rem!important;
+        overflow:hidden!important;
+    }
+    #loginPanel > .login-form-wrap{
+        flex:none!important;
+        width:100%!important;
+        height:auto!important;
+        padding:2rem 1.5rem 3rem!important;
+        overflow-y:visible!important;
+    }
+    #loginPanel.panel > div:first-child{
+        padding:2.5rem 1.5rem 2rem!important;
+        width:100%!important;
+    }
+    #loginPanel.panel > div:last-child{
+        padding:2rem 1.5rem 3rem!important;
+        width:100%!important;
+        background:#fff!important;
+    }
+    html,body{
+        height:auto!important;
+        overflow:auto!important;
+        overflow-x:hidden!important;
+    }
+    .form-inner{
+        padding-top:2rem!important;
+        max-width:440px!important;
+        margin:0 auto!important;
+    }
+}
+
+@media(max-width:480px){
+    #loginPanel > .login-brand{
+        padding:2rem 1rem 1.5rem!important;
+    }
+    #loginPanel > .login-form-wrap{
+        padding:1.5rem 1rem 2.5rem!important;
+    }
+    .form-inner{
+        padding-top:1.5rem!important;
+        max-width:100%!important;
+    }
+}
 </style>
 </head>
 <body>
@@ -1305,138 +1421,191 @@ html,body{background:#162540!important;overflow:hidden!important;}
 
 <!-- LEFT: Brand -->
 <div class="login-brand">
-    <span class="circle-extra"></span>
     <div class="brand-logo-wrap">
         <div class="brand-icon"><i class="fas fa-shield-halved"></i></div>
-        <div class="brand-name">ICT Control Center<span>Halo Trust Laos</span></div>
+        <div class="brand-name">ICT Control Center</div>
     </div>
     <div class="brand-main">
-        <!-- 3D Computer illustration -->
+        <!-- ICT Management System illustration -->
         <div class="brand-hero">
-            <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 340 230" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <!-- 3D face gradients white tones -->
-                    <linearGradient id="monFront" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#ffffff"/>
-                        <stop offset="100%" stop-color="#d0daf0"/>
+                    <linearGradient id="bgGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="rgba(56,189,248,.08)"/>
+                        <stop offset="100%" stop-color="rgba(99,102,241,.06)"/>
                     </linearGradient>
-                    <linearGradient id="monTop" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#ffffff"/>
-                        <stop offset="100%" stop-color="#e8eeff"/>
+                    <linearGradient id="screenG" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#0b1929"/>
+                        <stop offset="100%" stop-color="#0d2240"/>
                     </linearGradient>
-                    <linearGradient id="monSide" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#b8c8e8"/>
-                        <stop offset="100%" stop-color="#d8e4f8"/>
+                    <linearGradient id="laptopLid" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#d8e6f8"/>
+                        <stop offset="100%" stop-color="#b8ccec"/>
                     </linearGradient>
-                    <linearGradient id="screenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#0f172a"/>
-                        <stop offset="100%" stop-color="#1e3a5f"/>
+                    <linearGradient id="laptopBase" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#c8daf0"/>
+                        <stop offset="100%" stop-color="#a8bede"/>
                     </linearGradient>
-                    <linearGradient id="baseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#e2eaf8"/>
-                        <stop offset="100%" stop-color="#c4d0e8"/>
+                    <linearGradient id="nodeBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#3b82f6"/>
+                        <stop offset="100%" stop-color="#1d4ed8"/>
                     </linearGradient>
-                    <linearGradient id="baseSide" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#a8b8d8"/>
-                        <stop offset="100%" stop-color="#c4d0e8"/>
+                    <linearGradient id="nodeGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#10b981"/>
+                        <stop offset="100%" stop-color="#059669"/>
                     </linearGradient>
-                    <linearGradient id="kbFront" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#e8f0ff"/>
-                        <stop offset="100%" stop-color="#c8d4ee"/>
+                    <linearGradient id="nodePurple" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#8b5cf6"/>
+                        <stop offset="100%" stop-color="#6d28d9"/>
                     </linearGradient>
-                    <linearGradient id="kbTop" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stop-color="#ffffff"/>
-                        <stop offset="100%" stop-color="#dde6f8"/>
+                    <linearGradient id="nodeOrange" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#f59e0b"/>
+                        <stop offset="100%" stop-color="#d97706"/>
                     </linearGradient>
-                    <filter id="glow">
-                        <feGaussianBlur stdDeviation="3" result="blur"/>
-                        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    <linearGradient id="shieldG" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#38bdf8"/>
+                        <stop offset="100%" stop-color="#6366f1"/>
+                    </linearGradient>
+                    <filter id="glow2">
+                        <feGaussianBlur stdDeviation="2.5" result="b"/>
+                        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
                     </filter>
-                    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="4" dy="6" stdDeviation="6" flood-color="rgba(0,0,0,0.35)"/>
+                    <filter id="shadow2">
+                        <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,.4)"/>
+                    </filter>
+                    <filter id="nodeShadow">
+                        <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(0,0,0,.35)"/>
                     </filter>
                 </defs>
 
-                <!-- ══ MONITOR BODY 3D ══ -->
-                <!-- Top face -->
-                <polygon points="55,30 265,30 280,18 70,18" fill="url(#monTop)" stroke="rgba(255,255,255,.6)" stroke-width=".5"/>
-                <!-- Right side face -->
-                <polygon points="265,30 280,18 280,148 265,160" fill="url(#monSide)" stroke="rgba(180,200,230,.4)" stroke-width=".5"/>
-                <!-- Front face -->
-                <rect x="55" y="30" width="210" height="130" rx="4" fill="url(#monFront)" filter="url(#shadow)"/>
+                <!-- Background subtle glow -->
+                <ellipse cx="170" cy="115" rx="155" ry="100" fill="url(#bgGlow)"/>
 
-                <!-- Screen bezel (inner dark rim) -->
-                <rect x="65" y="40" width="190" height="108" rx="3" fill="#1a2540"/>
-                <!-- Screen display area -->
-                <rect x="70" y="44" width="180" height="100" rx="2" fill="url(#screenGrad)"/>
+                <!-- ══ NETWORK LINES (behind everything) ══ -->
+                <!-- Center laptop to nodes -->
+                <line x1="170" y1="100" x2="48"  y2="48"  stroke="rgba(99,179,237,.22)" stroke-width="1.5" stroke-dasharray="4,3"/>
+                <line x1="170" y1="100" x2="292" y2="48"  stroke="rgba(99,179,237,.22)" stroke-width="1.5" stroke-dasharray="4,3"/>
+                <line x1="170" y1="100" x2="44"  y2="170" stroke="rgba(99,179,237,.22)" stroke-width="1.5" stroke-dasharray="4,3"/>
+                <line x1="170" y1="100" x2="296" y2="170" stroke="rgba(99,179,237,.22)" stroke-width="1.5" stroke-dasharray="4,3"/>
+                <!-- Node to node cross lines -->
+                <line x1="48"  y1="48"  x2="292" y2="48"  stroke="rgba(99,179,237,.12)" stroke-width="1" stroke-dasharray="3,4"/>
+                <line x1="44"  y1="170" x2="296" y2="170" stroke="rgba(99,179,237,.12)" stroke-width="1" stroke-dasharray="3,4"/>
 
-                <!-- Screen content glow lines -->
-                <rect x="82" y="58"  width="100" height="5"  rx="2" fill="rgba(99,179,237,.55)"/>
-                <rect x="82" y="68"  width="70"  height="4"  rx="2" fill="rgba(99,179,237,.35)"/>
-                <rect x="82" y="80"  width="130" height="4"  rx="2" fill="rgba(99,179,237,.3)"/>
-                <rect x="82" y="89"  width="90"  height="4"  rx="2" fill="rgba(99,179,237,.25)"/>
-                <rect x="82" y="98"  width="110" height="4"  rx="2" fill="rgba(99,179,237,.2)"/>
-                <rect x="82" y="107" width="60"  height="4"  rx="2" fill="rgba(99,179,237,.2)"/>
-                <!-- Screen cursor blink dot -->
-                <rect x="82" y="120" width="8" height="8" rx="1" fill="rgba(56,189,248,.9)" filter="url(#glow)"/>
+                <!-- Animated data flow dots -->
+                <circle r="3" fill="rgba(56,189,248,.85)" filter="url(#glow2)">
+                    <animateMotion dur="2.5s" repeatCount="indefinite" path="M170,100 L48,48"/>
+                </circle>
+                <circle r="3" fill="rgba(99,102,241,.85)" filter="url(#glow2)">
+                    <animateMotion dur="3s" repeatCount="indefinite" path="M170,100 L292,48"/>
+                </circle>
+                <circle r="2.5" fill="rgba(16,185,129,.85)" filter="url(#glow2)">
+                    <animateMotion dur="2.8s" repeatCount="indefinite" path="M44,170 L170,100"/>
+                </circle>
+                <circle r="2.5" fill="rgba(245,158,11,.85)" filter="url(#glow2)">
+                    <animateMotion dur="3.2s" repeatCount="indefinite" path="M296,170 L170,100"/>
+                </circle>
+
+                <!-- ══ LAPTOP (center) ══ -->
+                <!-- Lid -->
+                <rect x="108" y="60" width="124" height="82" rx="6" fill="url(#laptopLid)" filter="url(#shadow2)"/>
+                <!-- Screen bezel -->
+                <rect x="113" y="65" width="114" height="72" rx="4" fill="#1a2540"/>
+                <!-- Screen -->
+                <rect x="116" y="68" width="108" height="66" rx="3" fill="url(#screenG)"/>
+
+                <!-- Dashboard UI on screen -->
+                <!-- Top bar -->
+                <rect x="116" y="68" width="108" height="10" rx="3" fill="rgba(255,255,255,.07)"/>
+                <circle cx="123" cy="73" r="2.5" fill="rgba(248,113,113,.7)"/>
+                <circle cx="130" cy="73" r="2.5" fill="rgba(251,191,36,.7)"/>
+                <circle cx="137" cy="73" r="2.5" fill="rgba(52,211,153,.7)"/>
+                <!-- Title bar text -->
+                <rect x="145" y="71" width="50" height="4" rx="2" fill="rgba(255,255,255,.25)"/>
+
+                <!-- Chart bars -->
+                <rect x="122" y="104" width="8" height="18" rx="2" fill="rgba(56,189,248,.7)"/>
+                <rect x="133" y="97"  width="8" height="25" rx="2" fill="rgba(99,102,241,.7)"/>
+                <rect x="144" y="108" width="8" height="14" rx="2" fill="rgba(16,185,129,.7)"/>
+                <rect x="155" y="100" width="8" height="22" rx="2" fill="rgba(245,158,11,.7)"/>
+                <rect x="166" y="105" width="8" height="17" rx="2" fill="rgba(56,189,248,.55)"/>
+
+                <!-- Stat cards on screen -->
+                <rect x="180" y="82" width="36" height="20" rx="3" fill="rgba(56,189,248,.14)" stroke="rgba(56,189,248,.3)" stroke-width=".8"/>
+                <rect x="184" y="85" width="14" height="3" rx="1" fill="rgba(56,189,248,.5)"/>
+                <rect x="184" y="90" width="20" height="6" rx="1" fill="rgba(255,255,255,.6)"/>
+
+                <rect x="180" y="106" width="36" height="20" rx="3" fill="rgba(16,185,129,.14)" stroke="rgba(16,185,129,.3)" stroke-width=".8"/>
+                <rect x="184" y="109" width="14" height="3" rx="1" fill="rgba(16,185,129,.5)"/>
+                <rect x="184" y="114" width="20" height="6" rx="1" fill="rgba(255,255,255,.6)"/>
+
+                <!-- Base hinge -->
+                <rect x="155" y="142" width="30" height="5" rx="2" fill="rgba(180,200,230,.7)"/>
+                <!-- Base -->
+                <rect x="118" y="147" width="104" height="10" rx="4" fill="url(#laptopBase)" filter="url(#shadow2)"/>
+                <!-- Trackpad -->
+                <rect x="155" y="150" width="30" height="5" rx="2" fill="rgba(160,185,220,.6)"/>
 
                 <!-- Power LED -->
-                <circle cx="157" cy="148" r="3" fill="#4ade80" opacity=".9" filter="url(#glow)"/>
+                <circle cx="170" cy="147" r="2" fill="#4ade80" filter="url(#glow2)" opacity=".9"/>
 
-                <!-- ══ NECK / STAND ══ -->
-                <!-- neck front -->
-                <rect x="140" y="160" width="40" height="20" rx="2" fill="url(#baseGrad)"/>
-                <!-- neck side -->
-                <polygon points="180,160 192,152 192,172 180,180" fill="url(#baseSide)"/>
-                <!-- neck top -->
-                <polygon points="140,160 152,152 192,152 180,160" fill="url(#monTop)"/>
+                <!-- ══ NODE: Account (top-left) ══ -->
+                <circle cx="48" cy="48" r="24" fill="url(#nodeBlue)" filter="url(#nodeShadow)"/>
+                <circle cx="48" cy="48" r="24" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+                <!-- user icon -->
+                <circle cx="48" cy="42" r="6" fill="rgba(255,255,255,.85)"/>
+                <path d="M36,58 Q36,51 48,51 Q60,51 60,58" fill="rgba(255,255,255,.85)" stroke="none"/>
+                <!-- pulse ring -->
+                <circle cx="48" cy="48" r="28" fill="none" stroke="rgba(59,130,246,.4)" stroke-width="1.5">
+                    <animate attributeName="r" values="24;32;24" dur="2.5s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values=".6;0;.6" dur="2.5s" repeatCount="indefinite"/>
+                </circle>
 
-                <!-- ══ BASE STAND 3D ══ -->
-                <!-- base top face -->
-                <polygon points="85,188 235,188 248,178 98,178" fill="url(#monTop)" stroke="rgba(255,255,255,.5)" stroke-width=".5"/>
-                <!-- base right side -->
-                <polygon points="235,188 248,178 248,200 235,210" fill="url(#baseSide)"/>
-                <!-- base front face -->
-                <rect x="85" y="188" width="150" height="22" rx="3" fill="url(#baseGrad)"/>
+                <!-- ══ NODE: Device (top-right) ══ -->
+                <circle cx="292" cy="48" r="24" fill="url(#nodePurple)" filter="url(#nodeShadow)"/>
+                <circle cx="292" cy="48" r="24" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+                <!-- laptop icon -->
+                <rect x="281" y="40" width="22" height="14" rx="2" fill="rgba(255,255,255,.85)"/>
+                <rect x="284" y="42" width="16" height="10" rx="1" fill="rgba(109,40,217,.6)"/>
+                <rect x="277" y="54" width="30" height="3" rx="1.5" fill="rgba(255,255,255,.7)"/>
+                <circle cx="292" cy="48" r="28" fill="none" stroke="rgba(139,92,246,.4)" stroke-width="1.5">
+                    <animate attributeName="r" values="24;32;24" dur="3s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values=".6;0;.6" dur="3s" repeatCount="indefinite"/>
+                </circle>
 
-                <!-- ══ KEYBOARD 3D ══ -->
-                <!-- kb top face -->
-                <polygon points="40,206 276,206 288,196 52,196" fill="url(#kbTop)"/>
-                <!-- kb right side -->
-                <polygon points="276,206 288,196 288,216 276,226" fill="url(#baseSide)"/>
-                <!-- kb front face -->
-                <rect x="40" y="206" width="236" height="20" rx="3" fill="url(#kbFront)"/>
+                <!-- ══ NODE: Equipment (bottom-left) ══ -->
+                <circle cx="44" cy="178" r="22" fill="url(#nodeGreen)" filter="url(#nodeShadow)"/>
+                <circle cx="44" cy="178" r="22" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+                <!-- boxes icon -->
+                <rect x="36" y="171" width="10" height="9" rx="1.5" fill="rgba(255,255,255,.85)"/>
+                <rect x="48" y="171" width="10" height="9" rx="1.5" fill="rgba(255,255,255,.85)"/>
+                <rect x="42" y="182" width="10" height="9" rx="1.5" fill="rgba(255,255,255,.75)"/>
+                <circle cx="44" cy="178" r="26" fill="none" stroke="rgba(16,185,129,.4)" stroke-width="1.5">
+                    <animate attributeName="r" values="22;30;22" dur="2.8s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values=".6;0;.6" dur="2.8s" repeatCount="indefinite"/>
+                </circle>
 
-                <!-- Keyboard keys rows -->
-                <g fill="rgba(150,170,210,.6)" stroke="rgba(255,255,255,.4)" stroke-width=".4">
-                    <!-- row 1 -->
-                    <rect x="50"  y="198" width="14" height="6" rx="1.5"/>
-                    <rect x="67"  y="198" width="14" height="6" rx="1.5"/>
-                    <rect x="84"  y="198" width="14" height="6" rx="1.5"/>
-                    <rect x="101" y="198" width="14" height="6" rx="1.5"/>
-                    <rect x="118" y="198" width="14" height="6" rx="1.5"/>
-                    <rect x="135" y="198" width="14" height="6" rx="1.5"/>
-                    <rect x="152" y="198" width="14" height="6" rx="1.5"/>
-                    <rect x="169" y="198" width="14" height="6" rx="1.5"/>
-                    <rect x="186" y="198" width="14" height="6" rx="1.5"/>
-                    <rect x="203" y="198" width="14" height="6" rx="1.5"/>
-                    <rect x="220" y="198" width="14" height="6" rx="1.5"/>
-                    <rect x="237" y="198" width="24" height="6" rx="1.5"/>
+                <!-- ══ NODE: Internet (bottom-right) ══ -->
+                <circle cx="296" cy="178" r="22" fill="url(#nodeOrange)" filter="url(#nodeShadow)"/>
+                <circle cx="296" cy="178" r="22" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1.5"/>
+                <!-- wifi icon -->
+                <path d="M286,174 Q296,164 306,174" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M289,179 Q296,172 303,179" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="296" cy="184" r="2.5" fill="rgba(255,255,255,.9)"/>
+                <circle cx="296" cy="178" r="26" fill="none" stroke="rgba(245,158,11,.4)" stroke-width="1.5">
+                    <animate attributeName="r" values="22;30;22" dur="3.2s" repeatCount="indefinite"/>
+                    <animate attributeName="opacity" values=".6;0;.6" dur="3.2s" repeatCount="indefinite"/>
+                </circle>
+
+                <!-- ══ CENTER SHIELD (overlay on laptop) ══ -->
+                <g transform="translate(148,85)" filter="url(#glow2)" opacity=".18">
+                    <path d="M22,0 L44,8 L44,22 Q44,36 22,44 Q0,36 0,22 L0,8 Z" fill="url(#shieldG)"/>
                 </g>
-                <!-- spacebar -->
-                <rect x="88" y="219" width="140" height="5" rx="2" fill="rgba(200,215,240,.5)" stroke="rgba(255,255,255,.3)" stroke-width=".5"/>
 
-                <!-- ══ MOUSE 3D ══ -->
-                <!-- mouse body -->
-                <ellipse cx="290" cy="200" rx="16" ry="22" fill="url(#monFront)" stroke="rgba(200,215,240,.5)" stroke-width="1"/>
-                <!-- mouse side highlight -->
-                <ellipse cx="294" cy="200" rx="8" ry="18" fill="url(#monSide)" opacity=".5"/>
-                <!-- mouse scroll wheel -->
-                <rect x="286" y="191" width="8" height="10" rx="3" fill="rgba(180,200,230,.7)"/>
-                <!-- mouse line divider -->
-                <line x1="290" y1="182" x2="290" y2="218" stroke="rgba(180,200,230,.6)" stroke-width="1"/>
-                <!-- mouse cable -->
-                <path d="M290 178 Q290 168 278 165 Q266 162 265 155" stroke="rgba(200,215,240,.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <!-- Node labels -->
+                <text x="48"  y="79"  text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="6.5" font-family="Inter,sans-serif" font-weight="600">Account</text>
+                <text x="292" y="79"  text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="6.5" font-family="Inter,sans-serif" font-weight="600">Device</text>
+                <text x="44"  y="207" text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="6.5" font-family="Inter,sans-serif" font-weight="600">Equipment</text>
+                <text x="296" y="207" text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="6.5" font-family="Inter,sans-serif" font-weight="600">Internet</text>
 
             </svg>
         </div>
@@ -1445,35 +1614,35 @@ html,body{background:#162540!important;overflow:hidden!important;}
         <h3>ICT MANAGEMENT <span class="highlight">SYSTEM</span></h3>
         <p class="brand-desc">Centralized platform for ICT infrastructure management</p>
         <div class="brand-features">
-            <div class="brand-feat">
+            <div class="brand-feat" onclick="openLoginModal('Account','fa-user-gear')">
                 <div class="brand-feat-icon"><i class="fas fa-user-gear"></i></div>
                 <span>Account</span>
             </div>
-            <div class="brand-feat">
+            <div class="brand-feat" onclick="openLoginModal('ICT Device','fa-laptop')">
                 <div class="brand-feat-icon"><i class="fas fa-laptop"></i></div>
                 <span>ICT Device</span>
             </div>
-            <div class="brand-feat">
+            <div class="brand-feat" onclick="openLoginModal('ICT Accessories','fa-plug')">
                 <div class="brand-feat-icon"><i class="fas fa-plug"></i></div>
                 <span>ICT Accessories</span>
             </div>
-            <div class="brand-feat">
+            <div class="brand-feat" onclick="openLoginModal('Devices Mistake','fa-triangle-exclamation')">
                 <div class="brand-feat-icon"><i class="fas fa-triangle-exclamation"></i></div>
                 <span>Devices Mistake</span>
             </div>
-            <div class="brand-feat">
+            <div class="brand-feat" onclick="openLoginModal('Card Record','fa-id-card')">
                 <div class="brand-feat-icon"><i class="fas fa-id-card"></i></div>
                 <span>Card Record</span>
             </div>
-            <div class="brand-feat">
+            <div class="brand-feat" onclick="openLoginModal('Equipment Stock','fa-boxes-stacked')">
                 <div class="brand-feat-icon"><i class="fas fa-boxes-stacked"></i></div>
                 <span>Equipment Stock</span>
             </div>
-            <div class="brand-feat">
+            <div class="brand-feat" onclick="openLoginModal('Employees','fa-users')">
                 <div class="brand-feat-icon"><i class="fas fa-users"></i></div>
                 <span>Employees</span>
             </div>
-            <div class="brand-feat">
+            <div class="brand-feat" onclick="openLoginModal('Internet','fa-wifi')">
                 <div class="brand-feat-icon"><i class="fas fa-wifi"></i></div>
                 <span>Internet</span>
             </div>
@@ -1530,7 +1699,7 @@ html,body{background:#162540!important;overflow:hidden!important;}
             <button class="btn-register-trigger" onclick="showRegister()">
             <i class="fas fa-user-plus"></i> Register new account
             </button>
-            <div class="login-footer"><div class="ver-note">ICT System v2.8.0 &nbsp;·&nbsp; Control </div></div>
+
 
 </div><!-- /form-inner -->
 </div><!-- /login-form-wrap -->
@@ -1611,7 +1780,7 @@ html,body{background:#162540!important;overflow:hidden!important;}
             </form>
 
             <div style="text-align:center;margin-top:1rem;padding-top:.875rem;border-top:1px solid #f1f5f9;">
-            <div style="font-size:.56rem;color:#aab8cc;">ICT System v2.7.0 &nbsp;·&nbsp; HALO Trust Laos</div>
+            <div style="font-size:.56rem;color:#aab8cc;">ICT System v2.7.0</div>
             </div>
 
             </div><!-- /modal body -->
@@ -2245,5 +2414,85 @@ html,body{background:#162540!important;overflow:hidden!important;}
             document.getElementById('rst_pw2').className='rst-field';
             }
             </script>
+
+<!-- ══ LOGIN MODAL (menu click) ══ -->
+<div class="login-modal-overlay" id="loginModalOverlay" onclick="handleOverlayClick(event)">
+  <div class="login-modal-card" id="loginModalCard">
+    <div class="login-modal-header">
+      <div class="lmh-icon"><i class="fas fa-shield-halved" id="modalMenuIcon"></i></div>
+      <div class="lmh-text">
+        <h3 id="modalMenuTitle">Sign In</h3>
+        <p>Enter your credentials to access the system</p>
+      </div>
+      <button class="login-modal-close" onclick="closeLoginModal()"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="login-modal-body">
+      <?php if ($error): ?>
+      <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:10px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.75rem;color:#b91c1c;display:flex;align-items:center;gap:.5rem;">
+        <i class="fas fa-circle-exclamation"></i><?= htmlspecialchars($error) ?>
+      </div>
+      <?php endif; ?>
+      <form method="POST" action="login.php" id="modalLoginForm">
+        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+        <div style="margin-bottom:1rem;">
+          <label style="display:block;font-size:.7rem;font-weight:700;color:#374151;margin-bottom:.4rem;letter-spacing:.06em;text-transform:uppercase;">Username / Email</label>
+          <input type="text" name="username" autocomplete="username" required placeholder="admin or registered Email"
+            style="width:100%;padding:.75rem 1rem;background:#f1f5fb;border:1.5px solid #e2e8f0;border-radius:12px;font-family:inherit;font-size:.82rem;color:#0f172a;outline:none;transition:border-color .15s;"
+            onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#e2e8f0'"
+            value="<?= htmlspecialchars($_POST['username'] ?? '') ?>">
+        </div>
+        <div style="margin-bottom:1.1rem;position:relative;">
+          <label style="display:block;font-size:.7rem;font-weight:700;color:#374151;margin-bottom:.4rem;letter-spacing:.06em;text-transform:uppercase;">Password</label>
+          <div style="position:relative;">
+            <input type="password" name="password" id="modalPwdInput" autocomplete="current-password" required placeholder="Enter your password"
+              style="width:100%;padding:.75rem 2.5rem .75rem 1rem;background:#f1f5fb;border:1.5px solid #e2e8f0;border-radius:12px;font-family:inherit;font-size:.82rem;color:#0f172a;outline:none;transition:border-color .15s;"
+              onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#e2e8f0'">
+            <button type="button" onclick="toggleModalPwd()" style="position:absolute;right:.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.85rem;padding:.25rem;">
+              <i class="fas fa-eye" id="modalPwdIcon"></i>
+            </button>
+          </div>
+        </div>
+        <div style="margin-bottom:1.25rem;">
+          <label style="display:flex;align-items:center;gap:.65rem;padding:.75rem .875rem;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;cursor:pointer;font-size:.78rem;color:#475569;user-select:none;transition:border-color .15s;" onmouseover="this.style.borderColor='#94a3b8'" onmouseout="this.style.borderColor='#e2e8f0'">
+            <input type="checkbox" name="remember" style="width:15px;height:15px;accent-color:#0f172a;cursor:pointer;flex-shrink:0;">
+            Remind me to sign in
+          </label>
+        </div>
+        <button type="submit"
+          style="width:100%;padding:.9rem;background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#fff;border:none;border-radius:12px;font-family:inherit;font-size:.82rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.6rem;transition:all .2s;box-shadow:0 4px 14px rgba(15,23,42,.3);"
+          onmouseover="this.style.background='linear-gradient(90deg,#3b5bdb,#6366f1)';this.style.boxShadow='0 6px 24px rgba(99,102,241,.45)'"
+          onmouseout="this.style.background='linear-gradient(135deg,#0f172a 0%,#1e293b 100%)';this.style.boxShadow='0 4px 14px rgba(15,23,42,.3)'">
+          <i class="fas fa-right-to-bracket"></i> LOG IN
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function openLoginModal(menuName, iconClass) {
+    document.getElementById('modalMenuTitle').textContent = menuName + ' — Sign In';
+    document.getElementById('modalMenuIcon').className = 'fas ' + iconClass;
+    var overlay = document.getElementById('loginModalOverlay');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function(){ var inp = overlay.querySelector('input[name="username"]'); if(inp) inp.focus(); }, 300);
+}
+function closeLoginModal() {
+    document.getElementById('loginModalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+function handleOverlayClick(e) {
+    if (e.target === document.getElementById('loginModalOverlay')) closeLoginModal();
+}
+function toggleModalPwd() {
+    var inp = document.getElementById('modalPwdInput');
+    var ico = document.getElementById('modalPwdIcon');
+    if (inp.type === 'password') { inp.type = 'text'; ico.className = 'fas fa-eye-slash'; }
+    else { inp.type = 'password'; ico.className = 'fas fa-eye'; }
+}
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLoginModal(); });
+</script>
+
             </body>
             </html>

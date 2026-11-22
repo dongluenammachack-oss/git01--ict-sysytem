@@ -1,4 +1,4 @@
-?<?php
+﻿?<?php
 // Fix InfinityFree "Cookies are not enabled" - must be BEFORE session_start()
 ini_set('display_errors', 0);
 error_reporting(0);
@@ -312,10 +312,50 @@ body, table, td, th, input, select, textarea, button, p, span, div {
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{font-size:15px;}
 body{font-family:'Inter','Phetsarath OT','Noto Sans Lao',system-ui,sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden;-webkit-font-smoothing:antialiased;}
+/* On mobile, body switches to block/scroll via media query */
+@media(max-width:768px){
+    body{display:block;height:auto;overflow-x:hidden;overflow-y:auto;}
+    main{overflow-y:auto;}
+    .content{overflow-x:hidden;}
+}
 ::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:#c2cfe0;border-radius:10px;}::-webkit-scrollbar-thumb:hover{background:#96b0cc;}
 
 /* SIDEBAR */
-.sidebar{width:240px;min-width:240px;background:var(--navy);display:flex;flex-direction:column;position:relative;overflow:hidden;z-index:40;box-shadow:2px 0 20px rgba(1,36,77,.18);transition:width .25s ease;}
+.sidebar{width:240px;min-width:240px;background:var(--navy);display:flex;flex-direction:column;position:relative;overflow:hidden;z-index:40;box-shadow:2px 0 20px rgba(1,36,77,.18);transition:width .3s cubic-bezier(.4,0,.2,1);}
+
+/* Collapsed sidebar (desktop toggle) */
+.sidebar.collapsed{width:64px;min-width:64px;}
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .ver-card .vl,
+.sidebar.collapsed .ver-card .vn,
+.sidebar.collapsed .nav-section-label,
+.sidebar.collapsed .nav-chevron,
+.sidebar.collapsed .nav-link > span > span:last-child,
+.sidebar.collapsed .nav-link > span:not(.nav-icon),
+.sidebar.collapsed .settings-btn{display:none !important;}
+.sidebar.collapsed .logo-wrap{padding:.875rem .75rem;justify-content:center;}
+.sidebar.collapsed .logo-icon{margin:0;}
+.sidebar.collapsed nav{padding:.5rem .5rem;}
+.sidebar.collapsed .nav-link{justify-content:center;padding:.55rem;gap:0;}
+.sidebar.collapsed .nav-link > span{justify-content:center;}
+.sidebar.collapsed .nav-icon{width:32px;height:32px;}
+.sidebar.collapsed .nav-link.active{border-left:3px solid #fff;padding-left:calc(.55rem - 3px);}
+.sidebar.collapsed .menu-open > .nav-link{border-left:3px solid #fff;padding-left:calc(.55rem - 3px);}
+.sidebar.collapsed .submenu{display:none !important;}
+.sidebar.collapsed .sidebar-footer{padding:.5rem;}
+.sidebar.collapsed .ver-card{justify-content:center;padding:.5rem;}
+.sidebar.collapsed .ver-card i{font-size:1rem;}
+.sidebar.collapsed .collapse-toggle-btn .ci-open{display:none;}
+.sidebar.collapsed .collapse-toggle-btn .ci-close{display:flex;}
+/* Toggle button in logo-wrap */
+.collapse-toggle-btn{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);font-size:.75rem;cursor:pointer;transition:all .2s;margin-left:auto;flex-shrink:0;}
+.collapse-toggle-btn:hover{background:rgba(6,195,255,.2);border-color:rgba(6,195,255,.4);color:var(--accent);}
+.collapse-toggle-btn .ci-close{display:none;}
+/* Tooltip labels when sidebar is collapsed on desktop */
+@media(min-width:769px){
+.sidebar.collapsed .nav-link{position:relative;}
+.sidebar.collapsed .nav-link:hover::after{content:attr(data-label);position:absolute;left:72px;top:50%;transform:translateY(-50%);background:#0d1b2e;color:#fff;font-size:.72rem;white-space:nowrap;padding:.35rem .75rem;border-radius:8px;z-index:100;pointer-events:none;box-shadow:0 4px 16px rgba(1,36,77,.25);}
+}
 .sidebar::before{content:'';position:absolute;top:-100px;right:-100px;width:300px;height:300px;background:radial-gradient(circle,rgba(6,195,255,.10) 0%,transparent 65%);pointer-events:none;}
 .logo-wrap{padding:1.375rem 1.125rem 1rem;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:.75rem;position:relative;z-index:1;}
 .logo-icon{width:36px;height:36px;flex-shrink:0;background:linear-gradient(135deg,rgba(6,195,255,.22),rgba(0,87,184,.15));border:1px solid rgba(6,195,255,.3);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:.85rem;}
@@ -391,7 +431,7 @@ body{font-family:'Inter','Phetsarath OT','Noto Sans Lao',system-ui,sans-serif;ba
 /* HEADER */
 header{height:60px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1.75rem;gap:1rem;flex-shrink:0;box-shadow:var(--shadow-sm);position:relative;z-index:20;}
 .hdr-title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;}
-.hdr-title h2{font-family:'Geist Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--navy);}
+.hdr-title h1,.hdr-title h2{font-family:'Geist Mono',monospace;font-size:.65rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--navy);}
 .hdr-title span{font-size:.57rem;color:var(--muted);display:block;margin-top:1px;}
 .online-dot{display:inline-flex;align-items:center;gap:.35rem;font-size:.67rem;color:var(--success);font-weight:600;}
 .online-dot::before{content:'';width:6px;height:6px;border-radius:50%;background:#22c55e;animation:pulse-dot 2s infinite;}
@@ -445,8 +485,8 @@ input.field:focus,select.field:focus,textarea.field:focus{border-color:var(--blu
 input.field:hover,select.field:hover{border-color:var(--border2);}
 .select-arrow{position:absolute;right:.85rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.52rem;pointer-events:none;}
 .cred-box{background:var(--bg);padding:.875rem;border-radius:var(--r-md);border:1px solid var(--border);}
-.btn-submit{width:100%;padding:.9rem;background:linear-gradient(90deg,var(--navy),var(--navy2));color:#fff;border:none;border-radius:var(--r-md);font-family:inherit;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center;gap:.6rem;margin-top:1.5rem;box-shadow:0 2px 12px rgba(1,36,77,.15);}
-.btn-submit:hover{filter:brightness(1.08);transform:translateY(-2px);box-shadow:0 6px 20px rgba(1,36,77,.22);}
+.btn-submit{width:100%;padding:.9rem;background:linear-gradient(90deg,var(--navy),var(--navy2));color:#fff;border:none;border-radius:var(--r-md);font-family:inherit;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:.6rem;margin-top:1.5rem;box-shadow:0 2px 12px rgba(1,36,77,.15);}
+.btn-submit:hover{background:linear-gradient(90deg,#3b5bdb,#6366f1);transform:translateY(-2px);box-shadow:0 6px 24px rgba(99,102,241,.45);filter:none;}
 
 /* TABLES */
 .tbl-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-md);}
@@ -629,7 +669,7 @@ a.action-btn.edit{display:none !important;}
     .nav-section-label,.nav-chevron,
     .nav-link > span > span:last-child,
     .nav-link > span:not(.nav-icon),
-    .settings-btn{display:none;}
+    .settings-btn,.collapse-toggle-btn{display:none;}
     .logo-wrap{padding:.875rem .75rem;justify-content:center;}
     .logo-icon{margin:0;}
     .sidebar nav{padding:.5rem .5rem;}
@@ -653,7 +693,7 @@ a.action-btn.edit{display:none !important;}
 
 /* ── Mobile (≤768px): full sidebar overlay ── */
 @media(max-width:768px){
-    html,body{overflow:auto;height:auto;}
+    html,body{overflow:auto;height:auto;min-height:100vh;}
     body{display:block;overflow-x:hidden;}
 
     /* Sidebar slides in as overlay */
@@ -663,8 +703,8 @@ a.action-btn.edit{display:none !important;}
         transform:translateX(-100%);
         transition:transform .28s cubic-bezier(.4,0,.2,1);
         z-index:40;
-        /* re-show text that was hidden at tablet */
         display:flex;
+        overflow-y:auto;
     }
     .sidebar.open{transform:translateX(0);}
     .sidebar-overlay{display:block;}
@@ -691,17 +731,24 @@ a.action-btn.edit{display:none !important;}
     .settings-btn{display:flex !important;}
 
     /* Main layout takes full width */
-    main{display:flex;flex-direction:column;min-height:100vh;}
+    main{
+        display:flex;flex-direction:column;
+        min-height:calc(100vh - 56px);
+        width:100%;
+        overflow-x:hidden;
+        overflow-y:visible;
+    }
 
     /* Header */
     header{
         position:sticky;top:0;z-index:30;
         padding:0 1rem;gap:.5rem;
         height:56px;
+        width:100%;
     }
-    .hamburger-btn{display:flex;}
+    .hamburger-btn{display:flex !important;}
     .hdr-title{position:static;transform:none;flex:1;text-align:left;}
-    .hdr-title h2{font-size:.6rem;}
+    .hdr-title h1,.hdr-title h2{font-size:.6rem;font-weight:700;letter-spacing:.1em;}
     .hdr-title span{display:none;}
     .online-dot{display:none;}
     .user-pill .urole{display:none;}
@@ -711,22 +758,55 @@ a.action-btn.edit{display:none !important;}
     .btn-logout{padding:.32rem .55rem;gap:0;}
 
     /* Content padding */
-    .content{padding:1rem;}
+    .content{padding:.75rem;width:100%;overflow-x:hidden;}
 
     /* Page header */
-    .page-hdr{flex-direction:column;align-items:flex-start;gap:.5rem;}
-    .page-hdr h2{font-size:1.15rem;}
-    .actions-row{width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:.25rem;}
+    .page-hdr{flex-direction:column;align-items:flex-start;gap:.5rem;margin-bottom:.875rem !important;}
+    .page-hdr h2{font-size:1.1rem;}
+    .actions-row{
+        width:100%;
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+        gap:.4rem;
+        overflow:visible;
+        flex-wrap:wrap;
+        padding-bottom:0;
+    }
+    .actions-row .btn-act{
+        justify-content:flex-start;
+        font-size:.7rem;
+        padding:.45rem .65rem;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
 
     /* Dashboard grids */
     .db-grid-4{grid-template-columns:repeat(2,1fr);gap:.6rem;}
     .db-grid-3{grid-template-columns:repeat(2,1fr);gap:.6rem;}
     .db-grid-7{grid-template-columns:repeat(2,1fr);gap:.5rem;}
-    .status-grid{grid-template-columns:repeat(2,1fr);gap:.5rem;}
+    /* status-grid: scroll horizontally on mobile for 7 device type columns */
+    .status-grid{
+        display:flex;
+        flex-wrap:nowrap;
+        overflow-x:auto;
+        gap:.5rem;
+        -webkit-overflow-scrolling:touch;
+        padding-bottom:.35rem;
+    }
+    .status-grid .status-col-wrap{
+        min-width:130px;
+        flex-shrink:0;
+    }
     .bottom-grid{grid-template-columns:1fr;}
     .db-card{padding:.875rem 1rem;}
     .db-icon{width:40px;height:40px;}
     .db-val{font-size:1.4rem;}
+
+    /* Internet overview 4-col => 2-col */
+    .db-section [style*="grid-template-columns:repeat(4,1fr)"]{
+        grid-template-columns:repeat(2,1fr) !important;
+    }
 
     /* Forms */
     .form-wrap{border-radius:var(--r-lg);}
@@ -735,7 +815,7 @@ a.action-btn.edit{display:none !important;}
     .g-span2,.g-span3{grid-column:span 1;}
 
     /* Tables */
-    .tbl-scroll{max-height:none;overflow-x:auto;}
+    .tbl-scroll{max-height:none;overflow-x:auto;-webkit-overflow-scrolling:touch;}
     .filter-bar{flex-wrap:wrap;gap:.4rem;}
     .filter-bar > *{flex-shrink:0;}
     thead th,tbody td{font-size:.72rem;padding:.55rem .65rem;}
@@ -749,18 +829,30 @@ a.action-btn.edit{display:none !important;}
 
 /* ── Small mobile (≤480px) ── */
 @media(max-width:480px){
-    .db-grid-4,.db-grid-3,.db-grid-7,.status-grid{grid-template-columns:1fr 1fr;}
+    .db-grid-4,.db-grid-3,.db-grid-7{grid-template-columns:1fr 1fr;}
+    .status-grid{
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+        overflow-x:hidden;
+    }
+    .status-grid .status-col-wrap{min-width:unset;flex-shrink:unset;}
     .db-card{gap:.6rem;}
     .db-icon{width:36px;height:36px;border-radius:10px;font-size:.95rem;}
     .db-val{font-size:1.2rem;}
     .db-lbl{font-size:.55rem;}
     header{height:52px;padding:0 .75rem;}
-    .hdr-title h2{font-size:.55rem;letter-spacing:.14em;}
-    .content{padding:.75rem;}
+    .hdr-title h1,.hdr-title h2{font-size:.55rem;letter-spacing:.1em;font-weight:700;}
+    .content{padding:.65rem;}
     .page-hdr h2{font-size:1rem;}
+    .actions-row{grid-template-columns:repeat(2,1fr);}
     .btn-act{font-size:.67rem;padding:.38rem .65rem;}
     .form-header{padding:1rem 1.125rem;}
     .form-header h3{font-size:.78rem;}
+    .db-section [style*="grid-template-columns:repeat(4,1fr)"]{
+        grid-template-columns:repeat(2,1fr) !important;
+    }
+    .st-cell-name{font-size:.62rem;}
+    .st-cell-num{font-size:1rem;}
 }
 </style>
 <!-- SheetJS for Excel export -->
@@ -778,7 +870,7 @@ a.action-btn.edit{display:none !important;}
 <aside class="sidebar">
 <div class="logo-wrap">
 <div class="logo-icon"><i class="fas fa-cube"></i></div>
-<div class="logo-text"><h1>ICT SYSTEM</h1><p>Halo Trust Laos</p></div>
+<div class="logo-text"><h1>ICT SYSTEM</h1></div>
 <?php 
 $is_admin = ($_SESSION['username']==='Admin ICT' || strtolower($_SESSION['role']??'')==='admin');
 if($is_admin): ?>
@@ -786,15 +878,19 @@ if($is_admin): ?>
 <i class="fas fa-gear"></i>
 </button>
 <?php endif; ?>
+<button class="collapse-toggle-btn" id="collapseToggleBtn" title="ຫຍໍ້/ຂະຫຍາຍ Sidebar" onclick="toggleDesktopSidebar()">
+<i class="fas fa-chevron-left ci-open"></i>
+<i class="fas fa-chevron-right ci-close"></i>
+</button>
 </div>
 <nav>
 <p class="nav-section-label">Main Menu</p>
-<a href="?page=dashboard" class="nav-link <?= $current_page=='dashboard'?'active':'' ?>">
+<a href="?page=dashboard" class="nav-link <?= $current_page=='dashboard'?'active':'' ?>" data-label="Dashboard">
 <span style="display:flex;align-items:center;gap:.625rem;"><span class="nav-icon"><i class="fas fa-chart-pie"></i></span>Dashboard</span>
 </a>
 
 <div class="menu-group <?= $current_page=='account'?'menu-open':'' ?>">
-<button class="nav-link" onclick="toggleSub('accountSub',this)">
+<button class="nav-link" onclick="toggleSub('accountSub',this)" data-label="Account">
 <span style="display:flex;align-items:center;gap:.625rem;"><span class="nav-icon"><i class="fas fa-user-shield"></i></span>Account</span>
 <i class="fas fa-chevron-down nav-chevron"></i>
 </button>
@@ -805,7 +901,7 @@ if($is_admin): ?>
 </div>
 
 <div class="menu-group <?= $current_page=='device'?'menu-open':'' ?>">
-<button class="nav-link" onclick="toggleSub('deviceSub',this)">
+<button class="nav-link" onclick="toggleSub('deviceSub',this)" data-label="ICT Device">
 <span style="display:flex;align-items:center;gap:.625rem;"><span class="nav-icon"><i class="fas fa-laptop-medical"></i></span>ICT Device</span>
 <i class="fas fa-chevron-down nav-chevron"></i>
 </button>
@@ -817,7 +913,7 @@ if($is_admin): ?>
 </div>
 
 <div class="menu-group <?= $current_page=='accessories'?'menu-open':'' ?>">
-<button class="nav-link" onclick="toggleSub('accessoriesSub',this)">
+<button class="nav-link" onclick="toggleSub('accessoriesSub',this)" data-label="ICT Accessories">
 <span style="display:flex;align-items:center;gap:.625rem;"><span class="nav-icon"><i class="fas fa-plug"></i></span>ICT Accessories</span>
 <i class="fas fa-chevron-down nav-chevron"></i>
 </button>
@@ -828,7 +924,7 @@ if($is_admin): ?>
 </div>
 
 <div class="menu-group <?= $current_page=='mistake'?'menu-open':'' ?>">
-<button class="nav-link" onclick="toggleSub('mistakeSub',this)">
+<button class="nav-link" onclick="toggleSub('mistakeSub',this)" data-label="Devices Mistake">
 <span style="display:flex;align-items:center;gap:.625rem;"><span class="nav-icon"><i class="fas fa-exclamation-triangle"></i></span>Devices Mistake</span>
 <i class="fas fa-chevron-down nav-chevron"></i>
 </button>
@@ -839,7 +935,7 @@ if($is_admin): ?>
 </div>
 
 <div class="menu-group <?= $current_page=='card_record'?'menu-open':'' ?>">
-<button class="nav-link" onclick="toggleSub('cardSub',this)">
+<button class="nav-link" onclick="toggleSub('cardSub',this)" data-label="Card Record">
 <span style="display:flex;align-items:center;gap:.625rem;"><span class="nav-icon"><i class="fas fa-address-card"></i></span>Card Record</span>
 <i class="fas fa-chevron-down nav-chevron"></i>
 </button>
@@ -850,7 +946,7 @@ if($is_admin): ?>
 </div>
 
 <div class="menu-group <?= $current_page=='equipment_stock'?'menu-open':'' ?>">
-<button class="nav-link" onclick="toggleSub('equipStockSub',this)">
+<button class="nav-link" onclick="toggleSub('equipStockSub',this)" data-label="Equipment Stock">
 <span style="display:flex;align-items:center;gap:.625rem;"><span class="nav-icon"><i class="fas fa-boxes-stacked"></i></span>ICT Equipment Stock</span>
 <i class="fas fa-chevron-down nav-chevron"></i>
 </button>
@@ -863,7 +959,7 @@ if($is_admin): ?>
 </div>
 
 <div class="menu-group <?= $current_page=='employees'?'menu-open':'' ?>">
-<button class="nav-link" onclick="toggleSub('employeesSub',this)">
+<button class="nav-link" onclick="toggleSub('employeesSub',this)" data-label="Employees">
 <span style="display:flex;align-items:center;gap:.625rem;"><span class="nav-icon"><i class="fas fa-users"></i></span>Employees</span>
 <i class="fas fa-chevron-down nav-chevron"></i>
 </button>
@@ -875,7 +971,7 @@ if($is_admin): ?>
 
 <!-- -->
 <div class="menu-group <?= $current_page=='internet'?'menu-open':'' ?>">
-<button class="nav-link" onclick="toggleSub('internetSub',this)">
+<button class="nav-link" onclick="toggleSub('internetSub',this)" data-label="Internet">
 <span style="display:flex;align-items:center;gap:.625rem;"><span class="nav-icon"><i class="fas fa-wifi"></i></span>Internet</span>
 <i class="fas fa-chevron-down nav-chevron"></i>
 </button>
@@ -903,13 +999,12 @@ if($is_admin): ?>
 <div class="online-dot">Online</div>
 <div class="hdr-title">
 <h1 style="font-weight: bold;">Dashboard Panel</h1>
-<span>ICT Management HALO Trust Laos</span>
+<span>ICT Management Overview</span>
 </div>
 <div class="user-pill" style="margin-left:auto;">
 <div class="avatar"><?= strtoupper(substr($_SESSION['username'] ?? 'A', 0, 1)) ?></div>
 <div>
 <div class="uname"><?= htmlspecialchars($_SESSION['username'] ?? 'Admin ICT') ?></div>
-<div class="urole">Halo Trust Laos</div>
 </div>
 </div>
 <a href="logout.php" class="btn-logout" onclick="return confirmLogout()"><i class="fas fa-right-from-bracket"></i> Logout</a>
@@ -918,8 +1013,14 @@ if($is_admin): ?>
 <div class="content">
 <?php if($current_page=='dashboard'): ?>
     
-    <div class="page-hdr" style="margin-bottom:1.25rem;">
-    <div><h2>System Dashboard</h2><p>ICT Management Overview Halo Trust Laos</p></div>
+    <div class="page-hdr" style="margin-bottom:1.5rem;">
+    <div class="dash-title-wrap">
+      <div class="dash-title-icon"><i class="fas fa-gauge-high"></i></div>
+      <div>
+        <h2 style="margin:0;">System Dashboard</h2>
+        <p style="margin:0;">ICT Management Overview</p>
+      </div>
+    </div>
     <div class="actions-row">
     <?php $qb=[
     ['page'=>'account',      'action'=>'form',      'icon'=>'fa-user-plus',         'label'=>'New Account'],
@@ -941,13 +1042,41 @@ if($is_admin): ?>
         <div class="db-section">
         <div class="db-sec-label"><i class="fas fa-users-cog"></i> Account Management</div>
         <div class="db-grid-4">
-        <a href="?page=account&action=list&filter_type=Survey+123" class="db-card" style="--dc:#3b82f6;--dibg:#eff6ff;--dic:#3b82f6;"><div class="db-icon"><i class="fas fa-poll-h"></i></div><div><div class="db-lbl">Survey 123</div><div class="db-val"><?=$c_sv?></div></div></a>
-        <a href="?page=account&action=list&filter_type=Office+365" class="db-card" style="--dc:#f97316;--dibg:#fff7ed;--dic:#f97316;"><div class="db-icon"><i class="fab fa-microsoft"></i></div><div><div class="db-lbl">Office 365</div><div class="db-val"><?=$c_off?></div></div></a>
-        <a href="?page=account&action=list&filter_type=Google+account" class="db-card" style="--dc:#ef4444;--dibg:#fef2f2;--dic:#ef4444;"><div class="db-icon"><i class="fab fa-google"></i></div><div><div class="db-lbl">Google Account</div><div class="db-val"><?=$c_google?></div></div></a>
-        <a href="?page=account&action=list&filter_type=Trimble+account" class="db-card" style="--dc:#6366f1;--dibg:#eef2ff;--dic:#6366f1;"><div class="db-icon"><i class="fas fa-globe"></i></div><div><div class="db-lbl">Trimble Account</div><div class="db-val"><?=$c_trimble?></div></div></a>
+        <a href="?page=account&action=list&filter_type=Survey+123" class="db-card db-card-v2" style="--dc:#2563eb;--dibg:#eff6ff;--dic:#2563eb;">
+          <div class="db-icon-v2" style="background:linear-gradient(135deg,#1e40af,#3b82f6);box-shadow:0 4px 14px rgba(59,130,246,.35);"><i class="fas fa-map-location-dot"></i></div>
+          <div class="db-card-body">
+            <div class="db-lbl">Survey 123</div>
+            <div class="db-val"><?=$c_sv?></div>
+            <div class="db-card-footer-line"><span class="db-trend-lbl">Total accounts</span><i class="fas fa-arrow-right db-arrow"></i></div>
+          </div>
+        </a>
+        <a href="?page=account&action=list&filter_type=Office+365" class="db-card db-card-v2" style="--dc:#0078d4;--dibg:#eff6ff;--dic:#0078d4;">
+          <div class="db-icon-v2" style="background:linear-gradient(135deg,#0078d4,#00bcf2);box-shadow:0 4px 14px rgba(0,120,212,.35);"><i class="fab fa-microsoft"></i></div>
+          <div class="db-card-body">
+            <div class="db-lbl">Office 365</div>
+            <div class="db-val"><?=$c_off?></div>
+            <div class="db-card-footer-line"><span class="db-trend-lbl">Total accounts</span><i class="fas fa-arrow-right db-arrow"></i></div>
+          </div>
+        </a>
+        <a href="?page=account&action=list&filter_type=Google+account" class="db-card db-card-v2" style="--dc:#ea4335;--dibg:#fef2f2;--dic:#ea4335;">
+          <div class="db-icon-v2" style="background:linear-gradient(135deg,#ea4335,#fbbc04,#34a853,#4285f4);box-shadow:0 4px 14px rgba(234,67,53,.3);"><i class="fab fa-google" style="color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.3);"></i></div>
+          <div class="db-card-body">
+            <div class="db-lbl">Google Account</div>
+            <div class="db-val"><?=$c_google?></div>
+            <div class="db-card-footer-line"><span class="db-trend-lbl">Total accounts</span><i class="fas fa-arrow-right db-arrow"></i></div>
+          </div>
+        </a>
+        <a href="?page=account&action=list&filter_type=Trimble+account" class="db-card db-card-v2" style="--dc:#e8a000;--dibg:#fffbeb;--dic:#e8a000;">
+          <div class="db-icon-v2" style="background:linear-gradient(135deg,#b45309,#f59e0b);box-shadow:0 4px 14px rgba(245,158,11,.35);"><i class="fas fa-location-crosshairs"></i></div>
+          <div class="db-card-body">
+            <div class="db-lbl">Trimble Account</div>
+            <div class="db-val"><?=$c_trimble?></div>
+            <div class="db-card-footer-line"><span class="db-trend-lbl">Total accounts</span><i class="fas fa-arrow-right db-arrow"></i></div>
+          </div>
+        </a>
         </div>
         </div>
-        
+
         <!-- Device Status Overview -->
         <div class="db-section">
         <div class="db-sec-label"><i class="fas fa-circle-check"></i> Device Status Overview</div>
@@ -958,16 +1087,20 @@ if($is_admin): ?>
             $cnt_w=$type_status_counts[$dtype]['Working']??0; $cnt_s=$type_status_counts[$dtype]['Spare']??0;
             $cnt_b=$type_status_counts[$dtype]['Broken']??0; $cnt_wo=$type_status_counts[$dtype]['Write-off']??0;
             $cnt_pw=$type_status_counts[$dtype]['Pending write-off']??0;
+            $total_dtype=$cnt_w+$cnt_s+$cnt_b+$cnt_wo+$cnt_pw;
             ?>
             <div class="status-col-wrap">
             <a href="?page=device&action=list&type=<?=urlencode($dtype)?>" class="status-type-hdr" style="--type-c:<?=$dic?>;text-decoration:none;">
-            <div style="display:flex;align-items:center;gap:.45rem;flex:1;"><i class="fas <?=$icon?>" style="color:<?=$dic?>;font-size:.95rem;"></i><span style="font-size:.78rem;font-weight:700;color:var(--navy);"><?=$dtype?></span></div>
-            <span style="font-size:1.25rem;font-weight:900;color:<?=$dic?>;font-feature-settings:'tnum';"><?=$cnt_w+$cnt_s+$cnt_b+$cnt_wo+$cnt_pw?></span>
+              <div class="sth-left">
+                <div class="sth-icon" style="background:<?=$dic?>22;color:<?=$dic?>;"><i class="fas <?=$icon?>"></i></div>
+                <span class="sth-name"><?=$dtype?></span>
+              </div>
+              <span class="sth-total" style="color:<?=$dic?>;"><?=$total_dtype?></span>
             </a>
             <a href="?page=device&action=list&type=<?=urlencode($dtype)?>&status=Working" class="st-cell st-working"><div class="st-cell-left"><div class="st-cell-ico"><i class="fas fa-check-circle"></i></div><span class="st-cell-name">Working</span></div><div class="st-cell-num"><?=$cnt_w?></div></a>
             <a href="?page=device&action=list&type=<?=urlencode($dtype)?>&status=Spare" class="st-cell st-spare"><div class="st-cell-left"><div class="st-cell-ico"><i class="fas fa-box"></i></div><span class="st-cell-name">Spare</span></div><div class="st-cell-num"><?=$cnt_s?></div></a>
-            <a href="?page=device&action=list&type=<?=urlencode($dtype)?>&status=Broken" class="st-cell st-broken"><div class="st-cell-left"><div class="st-cell-ico"><i class="fas fa-tools"></i></div><span class="st-cell-name">Broken</span></div><div class="st-cell-num"><?=$cnt_b?></div></a>
             <a href="?page=device&action=list&type=<?=urlencode($dtype)?>&status=Pending+write-off" class="st-cell st-pending"><div class="st-cell-left"><div class="st-cell-ico"><i class="fas fa-clock"></i></div><span class="st-cell-name">Pending</span></div><div class="st-cell-num"><?=$cnt_pw?></div></a>
+            <a href="?page=device&action=list&type=<?=urlencode($dtype)?>&status=Broken" class="st-cell st-broken"><div class="st-cell-left"><div class="st-cell-ico"><i class="fas fa-tools"></i></div><span class="st-cell-name">Broken</span></div><div class="st-cell-num"><?=$cnt_b?></div></a>
             <a href="?page=device&action=list&type=<?=urlencode($dtype)?>&status=Write-off" class="st-cell st-writeoff"><div class="st-cell-left"><div class="st-cell-ico"><i class="fas fa-ban"></i></div><span class="st-cell-name">Write-off</span></div><div class="st-cell-num"><?=$cnt_wo?></div></a>
             </div>
             <?php endforeach; ?>
@@ -992,39 +1125,24 @@ if($is_admin): ?>
             <div class="db-section">
             <div class="db-sec-label"><i class="fas fa-wifi"></i> Internet Overview</div>
             <!-- Summary Cards -->
-            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.875rem;margin-bottom:.875rem;">
-            <a href="?page=internet&action=list" class="db-card" style="--dc:#0f766e;--dibg:#f0fdfa;--dic:#0f766e;">
-            <div class="db-icon"><i class="fas fa-wifi"></i></div>
-            <div><div class="db-lbl">Total Internet</div><div class="db-val"><?=$c_internet?></div></div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.875rem;margin-bottom:1rem;">
+            <a href="?page=internet&action=list" class="db-card db-card-v2" style="--dc:#0ea5e9;--dibg:#f0f9ff;--dic:#0ea5e9;">
+              <div class="db-icon-v2" style="background:linear-gradient(135deg,#0284c7,#38bdf8);box-shadow:0 4px 14px rgba(14,165,233,.38);"><i class="fas fa-globe" style="color:#fff;"></i></div>
+              <div class="db-card-body"><div class="db-lbl">Total Internet</div><div class="db-val"><?=$c_internet?></div><div class="db-card-footer-line"><span class="db-trend-lbl">All contracts</span><i class="fas fa-arrow-right db-arrow"></i></div></div>
             </a>
-            <a href="?page=internet&action=list&filter_status=active" class="db-card" style="--dc:#16a34a;--dibg:#dcfce7;--dic:#16a34a;">
-            <div class="db-icon"><i class="fas fa-circle-check"></i></div>
-            <div><div class="db-lbl">Active</div><div class="db-val"><?=$inet_active?></div></div>
+            <a href="?page=internet&action=list&filter_status=active" class="db-card db-card-v2" style="--dc:#10b981;--dibg:#ecfdf5;--dic:#10b981;">
+              <div class="db-icon-v2" style="background:linear-gradient(135deg,#059669,#34d399);box-shadow:0 4px 14px rgba(16,185,129,.38);"><i class="fas fa-signal" style="color:#fff;"></i></div>
+              <div class="db-card-body"><div class="db-lbl">Active</div><div class="db-val"><?=$inet_active?></div><div class="db-card-footer-line"><span class="db-trend-lbl">Running now</span><i class="fas fa-arrow-right db-arrow"></i></div></div>
             </a>
-            <a href="?page=internet&action=list&filter_status=expiring" class="db-card" style="--dc:#d97706;--dibg:#ffedd5;--dic:#c2410c;border-color:#fed7aa;">
-            <div class="db-icon" style="background:#ffedd5;color:#c2410c;"><i class="fas fa-clock"></i></div>
-            <div style="flex:1;">
-            <div class="db-lbl">Expiring (&le;30d)</div>
-            <div class="db-val" style="color:#c2410c;"><?=$inet_expiring?></div>
-            <?php if($inet_expiring>0):
-                // Show up to 3 expiring contracts with days
-                $shown=0;
-                foreach($inet_rows as $xr){
-                if($shown>=3) break;
-                $xend=$xr['end_date']??'';
-                if(empty($xend)) continue;
-                $xdiff=round((strtotime($xend)-strtotime($today_db??date('Y-m-d')))/86400);
-                if($xdiff>=0&&$xdiff<=30){
-                echo '<div style="font-size:.58rem;color:#c2410c;font-weight:700;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;">'.htmlspecialchars(mb_substr($xr['internet_local']??'',0,18)).'… <span style="background:#c2410c;color:#fff;border-radius:4px;padding:0 4px;">'.$xdiff.'d</span></div>';
-                $shown++;
-                }
-                }
-            endif; ?>
-            </div>
+            <a href="?page=internet&action=list&filter_status=expiring" class="db-card db-card-v2" style="--dc:#f59e0b;border-color:#fde68a;">
+              <div class="db-icon-v2" style="background:linear-gradient(135deg,#d97706,#fbbf24);box-shadow:0 4px 14px rgba(245,158,11,.38);"><i class="fas fa-hourglass-half" style="color:#fff;"></i></div>
+              <div class="db-card-body" style="flex:1;"><div class="db-lbl">Expiring (&le;30d)</div><div class="db-val" style="color:#c2410c;"><?=$inet_expiring?></div>
+              <?php if($inet_expiring>0):$shown=0;foreach($inet_rows as $xr){if($shown>=2)break;$xend=$xr['end_date']??'';if(empty($xend))continue;$xdiff=round((strtotime($xend)-strtotime($today_db??date('Y-m-d')))/86400);if($xdiff>=0&&$xdiff<=30){echo '<div style="font-size:.58rem;color:#c2410c;font-weight:700;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'.htmlspecialchars(mb_substr($xr['internet_local']??'',0,14)).'… <span style="background:#c2410c;color:#fff;border-radius:4px;padding:0 4px;">'.$xdiff.'d</span></div>';$shown++;}}endif;?>
+              </div>
             </a>
-            <a href="?page=internet&action=list&filter_status=expired" class="db-card" style="--dc:#dc2626;--dibg:#fee2e2;--dic:#dc2626;">
-            <div class="db-icon"><i class="fas fa-circle-xmark"></i></div>
-            <div><div class="db-lbl">Expired</div><div class="db-val"><?=$inet_expired?></div></div>
+            <a href="?page=internet&action=list&filter_status=expired" class="db-card db-card-v2" style="--dc:#f43f5e;--dibg:#fff1f2;--dic:#f43f5e;">
+              <div class="db-icon-v2" style="background:linear-gradient(135deg,#e11d48,#fb7185);box-shadow:0 4px 14px rgba(244,63,94,.38);"><i class="fas fa-wifi" style="color:#fff;position:relative;"><span style="position:absolute;top:-2px;right:-3px;width:8px;height:8px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:6px;color:#e11d48;font-family:sans-serif;font-weight:900;line-height:1;">✕</span></i></div>
+              <div class="db-card-body"><div class="db-lbl">Expired</div><div class="db-val"><?=$inet_expired?></div><div class="db-card-footer-line"><span class="db-trend-lbl">Need renewal</span><i class="fas fa-arrow-right db-arrow"></i></div></div>
             </a>
             </div>
             <!-- Internet Table -->
@@ -1063,69 +1181,35 @@ if($is_admin): ?>
                     <td style="text-align:center;font-size:.75rem;"><?=htmlspecialchars($ir['start_date']??'')?></td>
                     <td style="text-align:center;font-size:.75rem;"><?=htmlspecialchars($end??'')?></td>
                     <td style="text-align:center;font-size:.75rem;font-weight:600;">
-                    <?php 
-                    if(empty($end)) {
-                    echo '<span style="color:var(--muted);">�</span>';
-                    } else {
-                    $diff_days = round((strtotime($end) - strtotime($today)) / 86400);
-                    if($diff_days < 0) {
-                    echo '<span style="color:#dc2626;font-weight:700;">Expired</span>';
-                    } elseif($diff_days == 0) {
-                    echo '<span style="color:#f59e0b;font-weight:700;">Today</span>';
-                    } elseif($diff_days <= 30) {
-                    echo '<span style="color:#f59e0b;font-weight:700;">' . $diff_days . ' days</span>';
-                    } else {
-                    echo '<span style="color:#059669;font-weight:600;">' . $diff_days . ' days</span>';
-                    }
-                    }
-                    ?>
+                    <?php if(empty($end)){echo '<span style="color:var(--muted);">—</span>';}else{$diff_days=round((strtotime($end)-strtotime($today))/86400);if($diff_days<0){echo '<span style="color:#dc2626;font-weight:700;">Expired</span>';}elseif($diff_days==0){echo '<span style="color:#f59e0b;font-weight:700;">Today</span>';}elseif($diff_days<=30){echo '<span style="color:#f59e0b;font-weight:700;">'.$diff_days.' days</span>';}else{echo '<span style="color:#059669;font-weight:600;">'.$diff_days.' days</span>';}} ?>
                     </td>
                     <td style="text-align:center;">
-                    <?php if($status_lbl==='Expiring' && isset($diff) && $diff>=0): ?>
+                    <?php if($status_lbl==='Expiring'&&isset($diff)&&$diff>=0): ?>
                         <span class="status-pill pill-expiring" style="display:inline-flex;flex-direction:column;align-items:center;padding:.25rem .6rem;gap:1px;">
                         <span style="font-size:.55rem;letter-spacing:.06em;text-transform:uppercase;">Expiring</span>
-                        <span style="font-size:.95rem;font-weight:900;line-height:1;" id="cntdwn-<?=$inet_no?>"><span class="db-countdown" data-days="<?=(int)$diff?>"></span></span>
+                        <span style="font-size:.95rem;font-weight:900;line-height:1;"><span class="db-countdown" data-days="<?=(int)$diff?>"></span></span>
                         </span>
-                        <?php else: ?>
-                            <span class="status-pill <?=$pill_cls?>"><?=$status_lbl?></span>
-                            <?php endif; ?>
-                            </td>
-                            <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;">
-                            <?php if(!empty($ir['document_link'])): ?>
-                                <a href="<?=htmlspecialchars($ir['document_link'])?>" target="_blank" style="color:var(--blue);font-size:.73rem;text-decoration:none;" title="<?=htmlspecialchars($ir['document_link'])?>"><i class="fas fa-external-link-alt"></i> <?=htmlspecialchars(substr($ir['document_link'],0,35)).(strlen($ir['document_link'])>35?'...':'')?></a>
-                                <?php else: ?><span style="color:var(--muted);font-size:.72rem;">—</span><?php endif; ?>
-                                    </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                    <?php if(empty($inet_rows)): ?>
-                                        <tr class="empty-row"><td colspan="9"><i class="fas fa-wifi"></i>No internet records yet</td></tr>
-                                        <?php endif; ?>
-                                        </tbody>
-                                        </table>
-                                        </div>
-                                        </div>
-                                        <!-- Countdown JS for dashboard -->
-                                        <script>
-                                        (function(){
-                                        document.querySelectorAll('.db-countdown').forEach(function(el){
-                                        var days = parseInt(el.getAttribute('data-days'));
-                                        function tick(){
-                                        var d = Math.floor(days);
-                                        el.textContent = d + 'd';
-                                        }
-                                        tick();
-                                        // Animate: pulse every second to simulate live countdown feel
-                                        setInterval(function(){ el.closest('.status-pill') && (el.closest('.status-pill').style.opacity = el.closest('.status-pill').style.opacity==='0.7'?'1':'0.7'); }, 1000);
-                                        setTimeout(function(){ if(el.closest('.status-pill')) el.closest('.status-pill').style.opacity='1'; }, 500);
-                                        });
-                                        })();
-                                        </script>
-                                        <?php else: ?>
-                                            <div style="background:var(--surface);border:1.5px dashed var(--border);border-radius:var(--r-xl);padding:2rem;text-align:center;color:var(--muted);">
-                                            <i class="fas fa-wifi" style="font-size:2rem;display:block;margin-bottom:.5rem;opacity:.2;"></i>
-                                            <p style="font-size:.75rem;">No internet records yet. <a href="?page=internet&action=form" style="color:var(--blue);font-weight:600;">Add one now</a></p>
-                                            </div>
-                                            <?php endif; ?>
+                    <?php else: ?>
+                        <span class="status-pill <?=$pill_cls?>"><?=$status_lbl?></span>
+                    <?php endif; ?>
+                    </td>
+                    <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;">
+                    <?php if(!empty($ir['document_link'])): ?>
+                        <a href="<?=htmlspecialchars($ir['document_link'])?>" target="_blank" style="color:var(--blue);font-size:.73rem;text-decoration:none;"><i class="fas fa-external-link-alt"></i> <?=htmlspecialchars(substr($ir['document_link'],0,35)).(strlen($ir['document_link'])>35?'...':'')?></a>
+                    <?php else: ?><span style="color:var(--muted);font-size:.72rem;">—</span><?php endif; ?>
+                    </td>
+                    </tr>
+                    <?php endforeach; ?>
+                    <?php if(empty($inet_rows)): ?><tr class="empty-row"><td colspan="9"><i class="fas fa-wifi"></i>No internet records yet</td></tr><?php endif; ?>
+                    </tbody></table></div></div>
+                <script>(function(){document.querySelectorAll('.db-countdown').forEach(function(el){var d=parseInt(el.getAttribute('data-days'));el.textContent=d+'d';setInterval(function(){if(el.closest('.status-pill'))el.closest('.status-pill').style.opacity=el.closest('.status-pill').style.opacity==='0.7'?'1':'0.7';},1000);});})();</script>
+            <?php else: ?>
+                <div style="background:var(--surface);border:1.5px dashed var(--border);border-radius:var(--r-xl);padding:2rem;text-align:center;color:var(--muted);">
+                <i class="fas fa-wifi" style="font-size:2rem;display:block;margin-bottom:.5rem;opacity:.2;"></i>
+                <p style="font-size:.75rem;">No internet records yet. <a href="?page=internet&action=form" style="color:var(--blue);font-weight:600;">Add one now</a></p>
+                </div>
+            <?php endif; ?>
+            </div>
                                             </div>
                                             
                                             
@@ -2968,8 +3052,18 @@ if($is_admin): ?>
 // Sidebar mobile open/close
 function openSidebar(){document.querySelector('.sidebar').classList.add('open');document.getElementById('sidebarOverlay').classList.add('open');}
 function closeSidebar(){document.querySelector('.sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('open');}
-// Close sidebar when nav link is clicked on mobile
-document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.nav-link,.submenu a').forEach(function(el){el.addEventListener('click',function(){if(window.innerWidth<=768)closeSidebar();});});});
+// Desktop sidebar collapse/expand toggle
+function toggleDesktopSidebar(){
+  const sb=document.querySelector('.sidebar');
+  const collapsed=sb.classList.toggle('collapsed');
+  try{localStorage.setItem('sidebarCollapsed',collapsed?'1':'0');}catch(e){}
+}
+// Restore sidebar state on load
+document.addEventListener('DOMContentLoaded',function(){
+  try{if(localStorage.getItem('sidebarCollapsed')==='1'&&window.innerWidth>768){document.querySelector('.sidebar').classList.add('collapsed');}}catch(e){}
+  // Close sidebar when nav link clicked on mobile
+  document.querySelectorAll('.nav-link,.submenu a').forEach(function(el){el.addEventListener('click',function(){if(window.innerWidth<=768)closeSidebar();});});
+});
                                                                                                                                                                                                                                                                                 // Permission guards
                                                                                                                                                                                                                                                                                 const _canEdit=<?=json_encode($_can_edit)?>;
                                                                                                                                                                                                                                                                                 const _canDelete=<?=json_encode($_can_delete)?>;
